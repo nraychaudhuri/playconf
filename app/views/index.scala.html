@@ -1,0 +1,20 @@
+@(submission: Form[Submission])
+
+@import helper._
+@main("Welcome to PlayConf") {
+
+  <div>
+     <p>Submit your proposal</p>
+     @form(action = routes.Application.submit()) {
+       @inputText(submission("title"))
+       @textarea(submission("proposal"), args = 'rows -> 3, 'cols -> 50)
+       @inputText(submission("speaker.name"))
+       @inputText(submission("speaker.email"))
+       @textarea(submission("speaker.bio"), args = 'rows -> 3, 'cols -> 50)
+       @inputText(submission("speaker.pictureUrl"))
+       @inputText(submission("speaker.twitterId"))
+       @inputText(submission("speaker.keywords"))
+       <button type="submit">Submit</button>       
+     }
+  </div>
+}
