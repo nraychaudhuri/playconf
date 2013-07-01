@@ -7,7 +7,7 @@ create table speaker (
   id                        bigint not null,
   name                      varchar(255),
   email                     varchar(255),
-  bio                       varchar(255),
+  bio                       varchar(1000),
   picture_url               varchar(255),
   twitter_id                varchar(255),
   constraint pk_speaker primary key (id))
@@ -16,7 +16,7 @@ create table speaker (
 create table submission (
   id                        bigint not null,
   title                     varchar(255),
-  proposal                  varchar(255),
+  proposal                  varchar(1000),
   is_approved               boolean,
   keywords                  varchar(255),
   speaker_id                bigint,

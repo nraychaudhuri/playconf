@@ -1,6 +1,7 @@
 package models;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -23,7 +24,8 @@ public class Submission extends Model {
 		
 	@Required
 	@MinLength(value = 10)
-	@MaxLength(value = 400)
+	@MaxLength(value = 1000)
+	@Column(length = 1000)
 	public String proposal;
 
 	@Required
