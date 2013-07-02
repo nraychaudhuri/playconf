@@ -1,8 +1,6 @@
 package controllers;
 
-import static models.Twitter.getAuthorizationUrlAndRequestToken;
-import static models.Twitter.userProfile;
-import static models.Twitter.userSettings;
+import static models.Twitter.*;
 
 import java.util.concurrent.Callable;
 
@@ -44,9 +42,8 @@ public class Application extends Controller {
 		final Token requestToken = new Token(flash("request_token"),
 				flash("request_secret"));		
 		Promise<JsonNode> promiseOfSettings = userSettings(requestToken, new Verifier(authVerifier));
-		Callback<JsonNode> notifyUserLocation = null;
-		Function<JsonNode, JsonNode> findUserLocation = null;
-		promiseOfSettings.map(findUserLocation).onRedeem(notifyUserLocation);
+		Callback<JsonNode> notifyRegisteredUser = null;
+		promiseOfSettings.onRedeem(notifyRegisteredUser);
 
 		return ok("You are successfully registered");
 
@@ -96,7 +93,7 @@ public class Application extends Controller {
 		result.put("proposal", s.proposal);
 		result.put("name", s.speaker.name);
 		result.put("twitterId", s.speaker.twitterId);
-		return _findFollowers(s.speaker.twitterId).map(
+		return findFollowers(s.speaker.twitterId).map(
 				new Function<Long, JsonNode>() {
 					public JsonNode apply(Long followerCount) {
 						result.put("followerCount", followerCount);
@@ -105,7 +102,7 @@ public class Application extends Controller {
 				});
 	}
 
-	private static Promise<Long> _findFollowers(final String screenName) {		
+	private static Promise<Long> findFollowers(final String screenName) {		
 		return userProfile(screenName).map(new Function<JsonNode, Long>() {
 			public Long apply(JsonNode s) {
 				return s.findPath("followers_count").asLong();

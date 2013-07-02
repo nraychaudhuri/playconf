@@ -55,7 +55,7 @@ public class Twitter {
 		});
 		return promiseOfSettings;
 	}
-
+	
 	public static Promise<JsonNode> userProfile(final String screenName) {
 		Promise<Response> response = twitterAccessToken();
 		return response.flatMap(new Function<Response, Promise<JsonNode>>() {
