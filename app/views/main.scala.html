@@ -10,7 +10,8 @@
         <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
         
 	        @helper.javascriptRouter("jsRoutes")(
-			  routes.javascript.Application.randomlyPickSession
+			  routes.javascript.Application.randomlyPickSession,
+			  routes.javascript.Application.messageBoard
 			)
         <script>
            jQuery(document).ready(function() {
@@ -18,7 +19,7 @@
 		          function(data) {
 		              // data is a JSON list, so we can iterate over it
 		              jQuery.each(data, function(key, val) {
-		                  window.alert(key + ':' + val);
+		                  console.log(key + ':' + val);
 		              });
 		          });
            });

@@ -1,28 +1,60 @@
 package controllers;
 
+import static models.Twitter.getAuthorizationUrlAndRequestToken;
+import static models.Twitter.userProfile;
+import static models.Twitter.userSettings;
+
 import java.util.concurrent.Callable;
 
+import models.MessageBoard;
 import models.Submission;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
+import org.scribe.model.Token;
+import org.scribe.model.Verifier;
 
 import play.data.Form;
+import play.libs.F.Callback;
 import play.libs.F.Function;
 import play.libs.F.Promise;
+import play.libs.F.Tuple;
 import play.libs.Json;
-import play.libs.WS;
-import play.libs.WS.Response;
-import play.libs.WS.WSRequestHolder;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
 
-import com.ning.http.util.Base64;
+import static models.Functions.*;
 
 public class Application extends Controller {
 
 	private static Form<Submission> form = Form.form(Submission.class);
+
+	public static Result register() {
+		Tuple<Token, String> t = getAuthorizationUrlAndRequestToken("http://" + request().host() + "/register_callback");
+		Token token = t._1;
+		String authorizationUrl = t._2;
+		flash("request_token", token.getToken());
+		flash("request_secret", token.getSecret());
+		return redirect(authorizationUrl);
+	}
+
+	public static Result register_callback() {
+		String authVerifier = request().getQueryString("oauth_verifier");
+		final Token requestToken = new Token(flash("request_token"),
+				flash("request_secret"));		
+		Promise<JsonNode> promiseOfSettings = userSettings(requestToken, new Verifier(authVerifier));
+		Callback<JsonNode> notifyUserLocation = null;
+		Function<JsonNode, JsonNode> findUserLocation = null;
+		promiseOfSettings.map(findUserLocation).onRedeem(notifyUserLocation);
+
+		return ok("You are successfully registered");
+
+	}
+
+	public static Result messageBoard(final String name) {
+		return ok(MessageBoard.newBoard());
+	}
 
 	public static Result index() {
 		return ok(index.render(form));
@@ -48,86 +80,38 @@ public class Application extends Controller {
 						return Submission.find.byId(randomId);
 					}
 				});
-		
-		Promise<JsonNode> promiseOfJson = promiseOfSubmission.flatMap(new Function<Submission, Promise<JsonNode>>() {
+
+		Promise<JsonNode> promiseOfJson = promiseOfSubmission
+				.flatMap(new Function<Submission, Promise<JsonNode>>() {
 					public Promise<JsonNode> apply(Submission s) {
-					  return makeResult(s);
+						return makeResult(s);
 					}
 				});
-		return async(promiseOfJson
-				.map(new Function<JsonNode, Result>() {
-					public Result apply(JsonNode s) {
-						return ok(s);
-					}
-				}));
+		return async(promiseOfJson.map(jsonToResult));
 	}
-	
-	
+
 	private static Promise<JsonNode> makeResult(Submission s) {
-		  final ObjectNode result = Json.newObject();
-		  result.put("title", s.title);
-		  result.put("proposal", s.proposal);
-		  result.put("name", s.speaker.name);
-		  result.put("twitterId", s.speaker.twitterId);
-		  return _findFollowers(s.speaker.twitterId).map(new Function<Long, JsonNode>() {
-			 public JsonNode apply(Long followerCount) {
-			   result.put("followerCount", followerCount);
-			   return result;
-			 }		  
-		  });
-	}
-
-	public static Result findFollowers(final String screenName) {
-	  return async(_findFollowers(screenName).map(new Function<Long, Result>() {
-		 public Result apply(Long s) {
-	    	return ok(s.toString());
-		 }
-		}));	
-	}
-
-	private static Promise<Long> _findFollowers(final String screenName) {
-		String consumerKey = "ZH15OspjNAfn5cyfLGm8KA";
-		String consumerSecret = "IKgL5u3KORkRDh9Ay78iBhrl3N4JWbQXxazCJNc";
-		String bearerToken = Base64.encode((consumerKey + ":" + consumerSecret)
-				.getBytes());
-
-		// getting the bearer token
-		WSRequestHolder req = WS
-				.url("https://api.twitter.com/oauth2/token")
-				.setHeader("Authorization", "Basic " + bearerToken)
-				.setContentType(
-						"application/x-www-form-urlencoded;charset=UTF-8");
-		Promise<Response> response = req.post("grant_type=client_credentials");
-
-		return response.flatMap(new Function<Response, Promise<Long>>() {
-					public Promise<Long> apply(Response s) {
-						String accessToken = s.asJson()
-								.findPath("access_token").asText();
-						return getFollowerCount(screenName, accessToken);
+		final ObjectNode result = Json.newObject();
+		result.put("title", s.title);
+		result.put("proposal", s.proposal);
+		result.put("name", s.speaker.name);
+		result.put("twitterId", s.speaker.twitterId);
+		return _findFollowers(s.speaker.twitterId).map(
+				new Function<Long, JsonNode>() {
+					public JsonNode apply(Long followerCount) {
+						result.put("followerCount", followerCount);
+						return result;
 					}
 				});
-
 	}
 
-	private static Promise<Long> getFollowerCount(String screenName,
-			String accessToken) {
-		WSRequestHolder req = WS
-				.url("https://api.twitter.com/1.1/users/show.json")
-				.setQueryParameter("screen_name", screenName)
-				.setHeader("Authorization", "Bearer " + accessToken);
-		return req.get().map(new Function<Response, Long>() {
-			public Long apply(Response s) {
-				return s.asJson().findPath("followers_count").asLong();
+	private static Promise<Long> _findFollowers(final String screenName) {		
+		return userProfile(screenName).map(new Function<JsonNode, Long>() {
+			public Long apply(JsonNode s) {
+				return s.findPath("followers_count").asLong();
 			}
 		});
-	}
 
-	// public static Result approvedSessions() {
-	// Filter<Submission> onlyApprovedFilter =
-	// Submission.find.filter().eq("isApproved", true);
-	// List<Submission> a = onlyApprovedFilter.filter(Submission.find.all());
-	// //Comet comet = new Comet
-	// return ok("");
-	// }
+	}
 
 }

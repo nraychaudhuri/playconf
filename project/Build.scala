@@ -12,7 +12,9 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     javaCore,
     javaJdbc,
-    javaEbean
+    javaEbean,
+    "org.twitter4j" % "twitter4j-core" % "3.0.3",
+    "org.scribe" % "scribe" % "1.3.5"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(

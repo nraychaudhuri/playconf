@@ -5,9 +5,13 @@
 # Home page
 GET    /               controllers.Application.index()
 
-GET    /randomsession  controllers.Application.randomlyPickSession()
+GET    /mb/:name       controllers.Application.messageBoard(name: String)
 
-GET   /followers/:name controllers.Application.findFollowers(name)
+GET    /register       controllers.Application.register()
+
+GET    /register_callback  controllers.Application.register_callback()
+
+GET    /randomsession  controllers.Application.randomlyPickSession()
 
 POST   /submit         controllers.Application.submit()                           
 
