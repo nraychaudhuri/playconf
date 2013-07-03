@@ -5,7 +5,7 @@ import cloudbees.Plugin._
 
 object ApplicationBuild extends Build {
 
-  val appName         = "playconf2"
+  val appName         = "playconf"
   val appVersion      = "1.0-SNAPSHOT"
 
   val appDependencies = Seq(
