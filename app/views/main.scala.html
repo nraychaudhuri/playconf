@@ -23,7 +23,19 @@
 		              });
 		          });
            });
-        </script>
+           
+	       if (!!window.EventSource) {
+	        var source = new EventSource(jsRoutes.controllers.Application.messageBoard().url);
+	         source.addEventListener('visitors', function(e) {
+	            $('#message').html(e.data)
+	        });
+	        source.addEventListener('register', function(e) {
+	            $('#message1').html(e.data)
+	        });
+	       } else {
+	         $("#message").html("Sorry. This browser doesn't seem to support Server sent event. Check <a href='http://html5test.com/compare/feature/communication-eventSource.html'>html5test</a> for browser compatibility."); 
+	       }
+      </script>
     </head>
     <body>
         @content

@@ -3,17 +3,8 @@
 @import helper._
 @main("Welcome to PlayConf") {
 
-   <script type="text/javascript" charset="utf-8"> 
-    var messageBoard = function(message) {
-      jQuery('#message').html(message)
-    }
-   </script>
-
-   <h1 id="message"></h1>
-   
-   <iframe id="comet" src="@routes.Application.messageBoard("sss")" hidden></iframe>
-   
-
+  <h1 id="message"></h1>
+  <h1 id="message1"></h1>
   <div>
      <p>Submit your proposal</p>
      @form(action = routes.Application.submit()) {

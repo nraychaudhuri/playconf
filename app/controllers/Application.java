@@ -40,6 +40,7 @@ public class Application extends Controller {
 		String authVerifier = request().getQueryString("oauth_verifier");
 		Promise<JsonNode> settings = userSettings(token, authVerifier);
 		// notify that user signed.
+		MessageBoard.userRegistrationEvent("New user signed");
 		return async(settings.map(jsonToResult));
 
 	}
