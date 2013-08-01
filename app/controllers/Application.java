@@ -1,26 +1,24 @@
 package controllers;
 
-import static models.Twitter.*;
-
-import java.util.concurrent.Callable;
-
-import models.MessageBoard;
+import static models.Functions.jsonToResult;
+import static models.EventPublisher.publisher;
+import static models.Twitter.retriveRequestToken;
+import static models.Twitter.userSettings;
 import models.Submission;
+import models.messages.CloseConnectionEvent;
+import models.messages.NewConnectionEvent;
 
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ObjectNode;
 
 import play.data.Form;
-import play.libs.F.Function;
+import play.libs.F.Callback0;
 import play.libs.F.Promise;
 import play.libs.F.Tuple;
-import play.libs.Json;
 import play.libs.OAuth.RequestToken;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.WebSocket;
 import views.html.*;
-
-import static models.Functions.*;
 
 public class Application extends Controller {
 
@@ -40,23 +38,40 @@ public class Application extends Controller {
 		String authVerifier = request().getQueryString("oauth_verifier");
 		Promise<JsonNode> settings = userSettings(token, authVerifier);
 		// notify that user signed.
-		MessageBoard.userRegistrationEvent("New user signed");
+		publisher.tell("New user signed", null);
 		return async(settings.map(jsonToResult));
 
 	}
 
-	public static Result messageBoard(final String name) {
-		return ok(MessageBoard.newBoard());
+	public static WebSocket<JsonNode> messageBoard(final String uuid) {
+	  return new WebSocket<JsonNode>() {
+		// Called when the Websocket Handshake is done.
+		public void onReady(WebSocket.In<JsonNode> in,
+				WebSocket.Out<JsonNode> out) {
+			publisher.tell(new NewConnectionEvent(uuid, out), null);
+			
+			in.onClose(new Callback0() {
+				@Override
+				public void invoke() throws Throwable {
+					publisher.tell(new CloseConnectionEvent(uuid), null);
+				}
+			});
+		}
+	  };
 	}
 
 	public static Result index() {
-		return ok(index.render(form));
+		return ok(index.render());
 	}
 
-	public static Result submit() {
+	public static Result newProposal() {
+		return ok(newProposal.render(form));
+	}
+
+	public static Result submitProposal() {
 		Form<Submission> filledForm = form.bindFromRequest();
 		if (filledForm.hasErrors()) {
-			return badRequest(index.render(filledForm));
+			return badRequest(newProposal.render(filledForm));
 		} else {
 			Submission s = filledForm.get();
 			s.save();
@@ -64,42 +79,5 @@ public class Application extends Controller {
 		}
 	}
 
-	public static Result randomlyPickSession() {
-		Promise<Submission> promiseOfSubmission = play.libs.Akka
-				.future(new Callable<Submission>() {
-					public Submission call() {
-						// randomly select one if the first
-						Long randomId = (long) (1 + Math.random() * (5 - 1));
-						return Submission.find.byId(randomId);
-					}
-				});
-
-		Promise<JsonNode> promiseOfJson = promiseOfSubmission
-				.flatMap(new Function<Submission, Promise<JsonNode>>() {
-					public Promise<JsonNode> apply(Submission s) {
-						return makeResult(s);
-					}
-				});
-		return async(promiseOfJson.map(jsonToResult));
-	}
-
-	private static Promise<JsonNode> makeResult(Submission s) {
-		final ObjectNode result = Json.newObject();
-		result.put("title", s.title);
-		result.put("proposal", s.proposal);
-		result.put("name", s.speaker.name);
-		result.put("twitterId", s.speaker.twitterId);
-		return findFollowers(s.speaker.twitterId).map(
-				new Function<Long, JsonNode>() {
-					public JsonNode apply(Long followerCount) {
-						result.put("followerCount", followerCount);
-						return result;
-					}
-				});
-	}
-
-	private static Promise<Long> findFollowers(final String screenName) {
-		return userProfile(screenName).map(findLongElement("followers_count"));
-	}
 
 }

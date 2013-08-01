@@ -1,34 +1,11 @@
-@(submission: Form[Submission])
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>PlayConf 2014</title>
-    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/home.css")">
-    <link rel="icon" type="image/ico" href="favicon.ico" />
-  </head>
-  <body>
-    <header class="top clear">
-      <div class="left">
-        <a id="logo" href="/">PlayConf 2014</a>
-        <p>Scala Days will be held this year in New York at The Hudson Theater on June 10th-12th.After much anticipation, we're thrilled to announce the fourth annual  be held this year in New York at The Hudson Theater on June 10th-12th.</p>
-      </div>
-      <div class="right">
-        <p class="month">September</p>
-        <p class="days">11,12,13</p>
-        <p class="city">New York</p>
-      </div>
-    </header>
-    <aside id="register">
-      <a class="button white" href="#">Register</a>
-      Sign in with your twitter account
-    </aside>
+@main("PlayConf 2014") {
     <section id="speakers" class="clear">
       <header>
         <h1>Speakers</h1>
         <p>Duis aute irure dolor in reprehenderit in voluptate velit esse
         cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
         proident, sunt in culpa qui officia deserunt molli.</p>
-        <a href="#" class="button green">Submit your proposal</a>
+        <a href="@routes.Application.newProposal()" class="button green">Submit your proposal</a>
       </header>
       <article>
         <ul>
@@ -43,29 +20,50 @@
             cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
             proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
           </li>
-          <li>
-            <img src="assets/images/fake-speaker.png">
-            <h2>Guillaume Bort</h2>
-            <a href="#" class="twitter">@@guillaumebort</a>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          </li>
-          <li>
-            <img src="assets/images/fake-speaker.png">
-            <h2>Guillaume Bort</h2>
-            <a href="#" class="twitter">@@guillaumebort</a>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          </li>
         </ul>
+      </article>
+    </section>
+    <section id="buzz" class="clear">
+      <h1>Buzz</h1>
+      <article>
+        <div class="author">
+          <img src="assets/images/fake-speaker.png">
+          <h2>Guillaume Bort</h2>
+          <a href="#" class="twitter">@@guillaumebort</a>
+        </div>
+        <div class="content">
+          Le code de notre session live coding avec @@Sadache pour #DevoxxFR – <a href="https://github.com/">https://github.com/guillaumebort/devoxxfr2013</a>
+        </div>
+      </article>
+      <article>
+        <div class="author">
+          <img src="assets/images/fake-speaker.png">
+          <h2>Guillaume Bort</h2>
+          <a href="#" class="twitter">@@guillaumebort</a>
+        </div>
+        <div class="content">
+          Le code de notre session live coding avec @@Sadache pour #DevoxxFR – <a href="https://github.com/">https://github.com/guillaumebort/devoxxfr2013</a>
+        </div>
+      </article>
+      <article>
+        <div class="author">
+          <img src="assets/images/fake-speaker.png">
+          <h2>Guillaume Bort</h2>
+          <a href="#" class="twitter">@@guillaumebort</a>
+        </div>
+        <div class="content">
+          Le code de notre session live coding avec @@Sadache pour #DevoxxFR – <a href="https://github.com/">https://github.com/guillaumebort/devoxxfr2013</a>
+        </div>
+      </article>
+      <article>
+        <div class="author">
+          <img src="assets/images/fake-speaker.png">
+          <h2>Guillaume Bort</h2>
+          <a href="#" class="twitter">@@guillaumebort</a>
+        </div>
+        <div class="content">
+          Le code de notre session live coding avec @@Sadache pour #DevoxxFR – <a href="https://github.com/">https://github.com/guillaumebort/devoxxfr2013</a>
+        </div>
       </article>
     </section>
 
@@ -76,137 +74,4 @@
       <p>The HUDSON THEATRE<br>145 W 44th St, New York, NY 10036</p>
       <p><a class="button dark" href="#">Map</a></p>
     </section>
-
-    <section id="schedule" class="clear">
-      <h1>Schedule</h1>
-      <!-- START-END => data-time="12:00-12:50" -->
-      <!-- Day start's hour must be round (eg: 08:00, 10:00) -->
-      <!-- DAY is used for routing -->
-      <div class="day" data-time="12:00-17:30" data-day="june-10">
-        <header><h2>Monday June 10th</h2></header>
-        <aside>
-        </aside>
-        <div class="tracks">
-          <!-- START-END => data-time="12:00-12:50" -->
-          <div class="pause" data-time="12:00-12:50">
-            <h2>Registration (Opens at 5pm)</h2>
-          </div>
-          <div class="pause" data-time="13:00-13:50">
-            <h2>Cocktail Hour</h2>
-          </div>
-          <div class="keynote small" data-time="14:00-15:20" data-target="1234">
-            <h2>Keynote - Scala with Style</h2>
-            <p class="speaker">Martin Odersky</p>
-          </div>
-          <div class="track room1" data-time="15:30-16:20" data-target="12345">
-            <h2>Project Lancet: Surgical Precision JIT compilers</h2>
-            <p class="speaker">Tiark Rompf</p>
-          </div>
-          <div class="track room2" data-time="15:30-16:20" data-target="12345">
-            <h2>Practical type mining in Scala</h2>
-            <p class="speaker">Rose Katherine Toomey</p>
-          </div>
-          <div class="track room3" data-time="15:30-16:20" data-target="12347">
-            <h2>Scala for Data Pipelines</h2>
-            <p class="speaker">Josh Wills</p>
-          </div>
-          <div class="track room1" data-time="16:30-17:20" data-target="12348">
-            <h2>Project Lancet: Surgical Precision JIT compilers</h2>
-            <p class="speaker">Tiark Rompf</p>
-          </div>
-          <div class="track room2" data-time="16:30-17:20" data-target="12349">
-            <h2>Practical type mining in Scala</h2>
-            <p class="speaker">Rose Katherine Toomey</p>
-          </div>
-          <div class="track room3" data-time="16:30-17:20" data-target="12350">
-            <h2>Scala for Data Pipelines</h2>
-            <p class="speaker">Josh Wills</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div id="details">
-      <div class="mask"></div>
-      <div class="container">
-        <div id="1234">
-          <div class="track">
-            <h2>Scala in Action</h2>
-            <p>You don't yet speak Scala? Then let us invite you to a journey on which we will explore the outstanding features of this programming language for the Java Virtual Machine. As an introduction we will briefly talk about Scala's key characteristics. Then we will explore this language and some of its typical applications, e.g. concise OO and powerful functional collections. If you are a developer and expect vivid examples and live coding, then you will like this session.</p>
-          </div>
-          <div class="speaker">
-            <h2>Heiko Seeberger</h2>
-            <p>Heiko Seeberger is the Director Professional Services at Typesafe. He has been a Scala enthusiast ever since he came to know this beautiful language in 2008. He has more than fifteen years of professional expertise in consulting and software development on the Java platform, actively contributes to Scala community projects and regularly shares his expertise in articles and talks. Heiko is the main author of the German Scala book "Durchstarten mit Scala".</p>
-          </div>
-        </div>
-        <div id="12345">
-          <div class="track">
-            <h2>Scala in Action</h2>
-            <p>You don't yet speak Scala? Then let us invite you to a journey on which we will explore the outstanding features of this programming language for the Java Virtual Machine. As an introduction we will briefly talk about Scala's key characteristics. Then we will explore this language and some of its typical applications, e.g. concise OO and powerful functional collections. If you are a developer and expect vivid examples and live coding, then you will like this session.</p>
-          </div>
-          <div class="speaker">
-            <h2>Heiko Seeberger</h2>
-            <p>Heiko Seeberger is the Director Professional Services at Typesafe. He has been a Scala enthusiast ever since he came to know this beautiful language in 2008. He has more than fifteen years of professional expertise in consulting and software development on the Java platform, actively contributes to Scala community projects and regularly shares his expertise in articles and talks. Heiko is the main author of the German Scala book "Durchstarten mit Scala".</p>
-          </div>
-        </div>
-        <div id="12346">
-          <div class="track">
-            <h2>Scala in Action</h2>
-            <p>You don't yet speak Scala? Then let us invite you to a journey on which we will explore the outstanding features of this programming language for the Java Virtual Machine. As an introduction we will briefly talk about Scala's key characteristics. Then we will explore this language and some of its typical applications, e.g. concise OO and powerful functional collections. If you are a developer and expect vivid examples and live coding, then you will like this session.</p>
-          </div>
-          <div class="speaker">
-            <h2>Heiko Seeberger</h2>
-            <p>Heiko Seeberger is the Director Professional Services at Typesafe. He has been a Scala enthusiast ever since he came to know this beautiful language in 2008. He has more than fifteen years of professional expertise in consulting and software development on the Java platform, actively contributes to Scala community projects and regularly shares his expertise in articles and talks. Heiko is the main author of the German Scala book "Durchstarten mit Scala".</p>
-          </div>
-        </div>
-        <div id="12347">
-          <div class="track">
-            <h2>Scala in Action</h2>
-            <p>You don't yet speak Scala? Then let us invite you to a journey on which we will explore the outstanding features of this programming language for the Java Virtual Machine. As an introduction we will briefly talk about Scala's key characteristics. Then we will explore this language and some of its typical applications, e.g. concise OO and powerful functional collections. If you are a developer and expect vivid examples and live coding, then you will like this session.</p>
-          </div>
-          <div class="speaker">
-            <h2>Heiko Seeberger</h2>
-            <p>Heiko Seeberger is the Director Professional Services at Typesafe. He has been a Scala enthusiast ever since he came to know this beautiful language in 2008. He has more than fifteen years of professional expertise in consulting and software development on the Java platform, actively contributes to Scala community projects and regularly shares his expertise in articles and talks. Heiko is the main author of the German Scala book "Durchstarten mit Scala".</p>
-          </div>
-        </div>
-        <div id="12348">
-          <div class="track">
-            <h2>Scala in Action</h2>
-            <p>You don't yet speak Scala? Then let us invite you to a journey on which we will explore the outstanding features of this programming language for the Java Virtual Machine. As an introduction we will briefly talk about Scala's key characteristics. Then we will explore this language and some of its typical applications, e.g. concise OO and powerful functional collections. If you are a developer and expect vivid examples and live coding, then you will like this session.</p>
-          </div>
-          <div class="speaker">
-            <h2>Heiko Seeberger</h2>
-            <p>Heiko Seeberger is the Director Professional Services at Typesafe. He has been a Scala enthusiast ever since he came to know this beautiful language in 2008. He has more than fifteen years of professional expertise in consulting and software development on the Java platform, actively contributes to Scala community projects and regularly shares his expertise in articles and talks. Heiko is the main author of the German Scala book "Durchstarten mit Scala".</p>
-          </div>
-        </div>
-        <div id="12349">
-          <div class="track">
-            <h2>Scala in Action</h2>
-            <p>You don't yet speak Scala? Then let us invite you to a journey on which we will explore the outstanding features of this programming language for the Java Virtual Machine. As an introduction we will briefly talk about Scala's key characteristics. Then we will explore this language and some of its typical applications, e.g. concise OO and powerful functional collections. If you are a developer and expect vivid examples and live coding, then you will like this session.</p>
-          </div>
-          <div class="speaker">
-            <h2>Heiko Seeberger</h2>
-            <p>Heiko Seeberger is the Director Professional Services at Typesafe. He has been a Scala enthusiast ever since he came to know this beautiful language in 2008. He has more than fifteen years of professional expertise in consulting and software development on the Java platform, actively contributes to Scala community projects and regularly shares his expertise in articles and talks. Heiko is the main author of the German Scala book "Durchstarten mit Scala".</p>
-          </div>
-        </div>
-        <div id="12350">
-          <div class="track">
-            <h2>Scala in Action</h2>
-            <p>You don't yet speak Scala? Then let us invite you to a journey on which we will explore the outstanding features of this programming language for the Java Virtual Machine. As an introduction we will briefly talk about Scala's key characteristics. Then we will explore this language and some of its typical applications, e.g. concise OO and powerful functional collections. If you are a developer and expect vivid examples and live coding, then you will like this session.</p>
-          </div>
-          <div class="speaker">
-            <h2>Heiko Seeberger</h2>
-            <p>Heiko Seeberger is the Director Professional Services at Typesafe. He has been a Scala enthusiast ever since he came to know this beautiful language in 2008. He has more than fifteen years of professional expertise in consulting and software development on the Java platform, actively contributes to Scala community projects and regularly shares his expertise in articles and talks. Heiko is the main author of the German Scala book "Durchstarten mit Scala".</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <footer>
-      This is a demo site, not a real conf.
-    </footer>
-
-    <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
-    <script src="@routes.Assets.at("javascripts/home.js")" type="text/javascript" charset="utf-8"></script>
-  </body>
-</html>
+}

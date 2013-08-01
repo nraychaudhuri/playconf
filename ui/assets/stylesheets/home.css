@@ -5,7 +5,7 @@
 li { list-style-type: none; }
 a { color: #7CB232; text-decoration: underline; }
 a:hover { color: #608E20; }
-a img { border: none; }
+button, a img { border: none; }
 section p { margin: 1em 0; }
 
 /*********
@@ -400,3 +400,81 @@ footer {
 	padding: 50px;
 	text-align: center;
 }
+
+
+/******
+ * FORM
+ ******/
+#proposal .bloc {
+	width: 50%;
+	float: left;
+	padding: 20px;
+}
+
+#proposal label {
+	display: block;
+	padding: 10px 0;
+}
+
+#proposal input,
+#proposal textarea {
+	display: block;
+	width: 100%;
+	border: 1px solid #ccc;
+	padding: 10px;
+}
+
+#description {
+	height: 400px;
+}
+
+#proposal .submit {
+	clear: both;
+	padding: 20px;
+	text-align: center;
+}
+
+/******
+ * BUZZ
+ ******/
+#buzz {
+	margin: 50px auto;
+}
+
+#buzz article {
+	margin: 20px;
+	overflow: hidden;
+}
+#buzz article .author {
+	padding: 20px;
+	width: 40%;
+	float: left;
+}
+#buzz article .content {
+	padding: 20px;
+	width: 60%;
+	float: right;
+	background: #f7f7f7;
+	position: relative;
+}
+#buzz article .content:after {
+	content: " ";
+	position: absolute;
+	top: 50%;
+	left: -10px;
+	margin-top: -10px;
+	width: 0; 
+	height: 0; 
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent; 
+	border-right:10px solid #f7f7f7; 
+}
+#buzz article img {
+	width: 50px;
+	border-radius: 30px;
+	float:left;
+	margin-right: 20px;
+}
+
+
+

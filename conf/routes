@@ -5,15 +5,15 @@
 # Home page
 GET    /               controllers.Application.index()
 
-GET    /mb/:name       controllers.Application.messageBoard(name: String)
+GET    /pushChannel/:uuid  controllers.Application.messageBoard(uuid)
 
 GET    /register       controllers.Application.register()
 
 GET    /register_callback  controllers.Application.register_callback()
 
-GET    /randomsession  controllers.Application.randomlyPickSession()
-
-POST   /submit         controllers.Application.submit()                           
+GET    /new            controllers.Application.newProposal()
+  
+POST   /submit         controllers.Application.submitProposal()                           
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file   controllers.Assets.at(path="/public", file)

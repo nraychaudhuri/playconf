@@ -1,43 +1,33 @@
 @(title: String)(content: Html)
-
 <!DOCTYPE html>
-
 <html>
-    <head>
-        <title>@title</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-        <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
-        
-	        @helper.javascriptRouter("jsRoutes")(
-			  routes.javascript.Application.randomlyPickSession,
-			  routes.javascript.Application.messageBoard
-			)
-        <script>
-           jQuery(document).ready(function() {
-		       jQuery.getJSON(jsRoutes.controllers.Application.randomlyPickSession().url,
-		          function(data) {
-		              // data is a JSON list, so we can iterate over it
-		              jQuery.each(data, function(key, val) {
-		                  console.log(key + ':' + val);
-		              });
-		          });
-           });
-           
-	       if (!!window.EventSource) {
-	        var source = new EventSource(jsRoutes.controllers.Application.messageBoard().url);
-	         source.addEventListener('visitors', function(e) {
-	            $('#message').html(e.data)
-	        });
-	        source.addEventListener('register', function(e) {
-	            $('#message1').html(e.data)
-	        });
-	       } else {
-	         $("#message").html("Sorry. This browser doesn't seem to support Server sent event. Check <a href='http://html5test.com/compare/feature/communication-eventSource.html'>html5test</a> for browser compatibility."); 
-	       }
-      </script>
-    </head>
-    <body>
-        @content
-    </body>
+  <head>
+    <title>@title</title>
+    <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/home.css")">  
+    <link rel="icon" type="image/ico" href="favicon.ico" />
+  </head>
+  <body>
+    <header class="top clear">
+      <div class="left">
+        <a id="logo" href="/">PlayConf 2014</a>
+        <p>Scala Days will be held this year in New York at The Hudson Theater on June 10th-12th.After much anticipation, we're thrilled to announce the fourth annual  be held this year in New York at The Hudson Theater on June 10th-12th.</p>
+      </div>
+      <div class="right">
+        <p class="month">September</p>
+        <p class="days">11,12,13</p>
+        <p class="city">New York</p>
+      </div>
+    </header>
+    <aside id="register">
+      <a class="button white" href="#">Register</a>
+      Sign in with your twitter account
+    </aside>
+      @content
+    <footer>
+      This is a demo site, not a real conf.
+    </footer>
+
+    <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript" charset="utf-8"></script>
+    <script src="@routes.Assets.at("javascripts/home.js")" type="text/javascript" charset="utf-8"></script>
+  </body>
 </html>

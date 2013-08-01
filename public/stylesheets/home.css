@@ -2,10 +2,15 @@
  * RESET
  *******/
 * { margin: 0; padding: 0; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+
 li { list-style-type: none; }
+
 a { color: #7CB232; text-decoration: underline; }
+
 a:hover { color: #608E20; }
-a img { border: none; }
+
+button, a img { border: none; }
+
 section p { margin: 1em 0; }
 
 /*********
@@ -212,187 +217,6 @@ h1 {
 	float: right;
 }
 
-
-/**********
- * SCHEDULE
- **********/
-#schedule {
-	position: relative;
-	margin-top: 60px;
-}
-#schedule.open {
-	padding-bottom: 240px;
-}
-#schedule .day {
-	position: relative;
-	background: #fff;
-}
-#schedule .day header {
-	position: absolute;
-	top: 0;
-	width: 100%;
-	padding: 20px;
-	height: 60px;
-	background: #444;
-	color: #fff;
-	z-index: 9;
-	-webkit-transform: translate3d(0,0,0);
-}
-
-
-#schedule aside {
-	position: absolute;
-	top: 60px;
-	left: 0;
-	bottom: 0;
-	width: 100px;
-	background: #f7f7f7 url(../images/time-schedule.png) right 22px repeat-y;
-}
-
-#schedule aside .time {
-	color: #777;
-}
-#schedule .time {
-	position: absolute;
-	right: 30px;
-	font-weight: 900;
-	font-size: 16px;
-	margin-top: 9px;
-}
-
-
-#schedule .tracks {
-	position: absolute;
-	top: 80px;
-	right: 10px;
-	bottom: 0;
-	left: 110px;
-}
-#schedule .tracks > div {
-	position: absolute;
-	border-left: 10px solid #fff;
-	border-right: 10px solid #fff;
-	padding: 5px 10px;
-}
-#schedule .pause {
-	width: 100%;
-	background: rgb(254, 255, 208);
-	padding: 10px;
-}
-#schedule .keynote {
-	width: 100%;
-	background: #93CC46;
-}
-#schedule .tracks .track {
-	width: 33.333%;
-	background: #f7f7f7;
-	-webkit-transition: background 200ms ease-in-out;
-	-moz-transition: background 200ms ease-in-out;
-	transition: background 200ms ease-in-out;
-}
-
-
-#schedule .tracks .track.room1 {
-	left: 0;
-}
-#schedule .tracks .track.room2 {
-	left: 33.333%;
-}
-#schedule .tracks .track.room3 {
-	left: 66.666%;
-}
-
-#schedule h2 {
-	margin: 0;
-	font-size: 14px;
-	text-align: left;
-	font-weight: 900;
-	font-style: italic;
-}
-#schedule .tracks .speaker {
-	display: block;
-	margin-right: 5px;
-	color: #222;
-	-webkit-transition: all 200ms ease-in-out;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-#schedule .tracks .speakersbio {
-	display: block;
-	color: #8a2420;
-	-webkit-transition: all 200ms ease-in-out;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-    padding-top: 5px;
-}
-
-#schedule .keynote h2 {
-	font-size: 20px;
-	color: white;
-}
-#schedule .keynote .speaker {
-	color: white;
-}
-#schedule .keynote .speakersbio {
-    padding-top: 5px;
-}
-
-#schedule .track:hover {
-	background: #eee;
-	color: #333;
-	cursor: pointer;
-}
-
-#schedule .pause h2 {
-	margin: 0;
-	height: 100px;
-	color: #666;
-	text-align: center;
-}
-
-
-#details {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	z-index: 9999;
-	display: none;
-}
-#details .mask {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background: rgba(0,0,0,.4);
-}
-#details .container {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	padding: 30px;
-	max-width: 100%;
-	max-height: 100%;
-	overflow: auto;
-	-webkit-transform: translate(-50%,-50%);
-	-moz-transform: translate(-50%,-50%);
-	transform: translate(-50%,-50%);
-	-webkit-transition: all 500ms ease-in-out;
-	-moz-transition: all 500ms ease-in-out;
-	transition: all 500ms ease-in-out;
-	background: white;
-}
-#details .container > div {
-	display: none;
-}
-#details .container div.active {
-	display: block;
-}
-
 /********
  * FOOTER
  ********/
@@ -400,3 +224,94 @@ footer {
 	padding: 50px;
 	text-align: center;
 }
+
+
+/******
+ * FORM
+ ******/
+#proposal .bloc {
+	width: 50%;
+	float: left;
+	padding: 20px;
+}
+
+#proposal label {
+	display: block;
+	padding: 10px 0px 0px 0px;
+	font: 15px "Helvetica Neue", sans-serif;
+}
+
+#proposal input,
+#proposal textarea {
+	display: block;
+	width: 100%;
+	border: 1px solid #ccc;
+	padding: 10px;
+}
+
+#description {
+	height: 400px;
+}
+
+#proposal .submit {
+	clear: both;
+	padding: 20px;
+	text-align: center;
+}
+
+.info {
+	font: 10px "Helvetica Neue", sans-serif;
+	font-style:italic;
+	color:#58782D;	
+}
+
+.error {
+	font: 15px "Helvetica Neue", sans-serif;
+	font-style:italic;
+	color:red;	
+}
+
+/******
+ * BUZZ
+ ******/
+#buzz {
+	margin: 50px auto;
+}
+
+#buzz article {
+	margin: 20px;
+	overflow: hidden;
+}
+#buzz article .author {
+	padding: 20px;
+	width: 40%;
+	float: left;
+}
+#buzz article .content {
+	padding: 20px;
+	width: 60%;
+	float: right;
+	background: #f7f7f7;
+	position: relative;
+}
+#buzz article .content:after {
+	content: " ";
+	position: absolute;
+	top: 50%;
+	left: -10px;
+	margin-top: -10px;
+	width: 0; 
+	height: 0; 
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent; 
+	border-right:10px solid #f7f7f7; 
+}
+#buzz article img {
+	width: 50px;
+	border-radius: 30px;
+	float:left;
+	margin-right: 20px;
+}
+
+
+
