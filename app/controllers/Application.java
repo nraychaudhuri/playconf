@@ -9,18 +9,16 @@ import models.Submission;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
-import org.scribe.model.Token;
-import org.scribe.model.Verifier;
 
 import play.data.Form;
-import play.libs.F.Callback;
 import play.libs.F.Function;
 import play.libs.F.Promise;
 import play.libs.F.Tuple;
 import play.libs.Json;
+import play.libs.OAuth.RequestToken;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.index;
+import views.html.*;
 
 import static models.Functions.*;
 
@@ -29,23 +27,21 @@ public class Application extends Controller {
 	private static Form<Submission> form = Form.form(Submission.class);
 
 	public static Result register() {
-		Tuple<Token, String> t = getAuthorizationUrlAndRequestToken("http://" + request().host() + "/register_callback");
-		Token token = t._1;
-		String authorizationUrl = t._2;
-		flash("request_token", token.getToken());
-		flash("request_secret", token.getSecret());
-		return redirect(authorizationUrl);
+		Tuple<String, RequestToken> t = retriveRequestToken("http://"
+				+ request().host() + "/register_callback");
+		flash("request_token", t._2.token);
+		flash("request_secret", t._2.secret);
+		return redirect(t._1);
 	}
 
 	public static Result register_callback() {
+		RequestToken token = new RequestToken(flash("request_token"),
+				flash("request_secret"));
 		String authVerifier = request().getQueryString("oauth_verifier");
-		final Token requestToken = new Token(flash("request_token"),
-				flash("request_secret"));		
-		Promise<JsonNode> promiseOfSettings = userSettings(requestToken, new Verifier(authVerifier));
-		Callback<JsonNode> notifyRegisteredUser = null;
-		promiseOfSettings.onRedeem(notifyRegisteredUser);
-
-		return ok("You are successfully registered");
+		Promise<JsonNode> settings = userSettings(token, authVerifier);
+		// notify that user signed.
+		MessageBoard.userRegistrationEvent("New user signed");
+		return async(settings.map(jsonToResult));
 
 	}
 
@@ -102,13 +98,8 @@ public class Application extends Controller {
 				});
 	}
 
-	private static Promise<Long> findFollowers(final String screenName) {		
-		return userProfile(screenName).map(new Function<JsonNode, Long>() {
-			public Long apply(JsonNode s) {
-				return s.findPath("followers_count").asLong();
-			}
-		});
-
+	private static Promise<Long> findFollowers(final String screenName) {
+		return userProfile(screenName).map(findLongElement("followers_count"));
 	}
 
 }
