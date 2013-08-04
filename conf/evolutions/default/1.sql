@@ -17,9 +17,11 @@ create table submission (
   id                        bigint not null,
   title                     varchar(255),
   proposal                  varchar(1000),
+  type                      integer,
   is_approved               boolean,
   keywords                  varchar(255),
   speaker_id                bigint,
+  constraint ck_submission_type check (type in (0,1)),
   constraint pk_submission primary key (id))
 ;
 

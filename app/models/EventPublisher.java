@@ -1,11 +1,9 @@
 package models;
 
-import static models.Functions.findLongElement;
-import static models.Twitter.userProfile;
+import static models.Functions.makeResult;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import models.messages.CloseConnectionEvent;
 import models.messages.NewConnectionEvent;
@@ -14,15 +12,11 @@ import models.messages.TalkSubmissionEvent;
 import models.messages.UserRegistrationEvent;
 
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ObjectNode;
 
 import play.Logger;
 import play.libs.Akka;
-import play.libs.F;
-import play.libs.F.Function;
-import play.libs.F.Promise;
 import play.libs.F.Callback;
-import play.libs.Json;
+import play.libs.F.Promise;
 import play.mvc.WebSocket.Out;
 import akka.actor.ActorRef;
 import akka.actor.Props;
@@ -52,15 +46,19 @@ public class EventPublisher extends UntypedActor {
 		if (message instanceof UserRegistrationEvent) {
 			UserRegistrationEvent ure = (UserRegistrationEvent) message;
 			for (Out<JsonNode> out : connections.values()) {
-				out.write(Json.newObject());
+				out.write(ure.userInfo());
 			}
 		}
 		if (message instanceof RandomlySelectTalkEvent) {
-			Promise<JsonNode> promiseOfJson = randomlyPickSession();
+			Promise<JsonNode> promiseOfJson = 
+					Submission.randomlyPickSession().flatMap(makeResult);
+		    System.out.println("Select a proposal");
 			promiseOfJson.onRedeem(new Callback<JsonNode>() {
 				@Override
 				public void invoke(JsonNode json) throws Throwable {
-					
+					for (Out<JsonNode> out : connections.values()) {
+						out.write(json);
+					}					
 				}
 			});
 		}
@@ -69,43 +67,4 @@ public class EventPublisher extends UntypedActor {
 		} else
 			unhandled(message);
 	}
-
-	public static F.Promise<JsonNode> randomlyPickSession() {
-		Promise<Submission> promiseOfSubmission = play.libs.Akka
-				.future(new Callable<Submission>() {
-					public Submission call() {
-						// randomly select one if the first
-						Long randomId = (long) (1 + Math.random() * (5 - 1));
-						return Submission.find.byId(randomId);
-					}
-				});
-
-		Promise<JsonNode> promiseOfJson = promiseOfSubmission
-				.flatMap(new Function<Submission, Promise<JsonNode>>() {
-					public Promise<JsonNode> apply(Submission s) {
-						return makeResult(s);
-					}
-				});
-		return promiseOfJson;
-	}
-
-	private static Promise<JsonNode> makeResult(Submission s) {
-		final ObjectNode result = Json.newObject();
-		result.put("title", s.title);
-		result.put("proposal", s.proposal);
-		result.put("name", s.speaker.name);
-		result.put("twitterId", s.speaker.twitterId);
-		return findFollowers(s.speaker.twitterId).map(
-				new Function<Long, JsonNode>() {
-					public JsonNode apply(Long followerCount) {
-						result.put("followerCount", followerCount);
-						return result;
-					}
-				});
-	}
-
-	private static Promise<Long> findFollowers(final String screenName) {
-		return userProfile(screenName).map(findLongElement("followers_count"));
-	}
-
 }

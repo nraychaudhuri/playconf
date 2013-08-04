@@ -1,15 +1,17 @@
 package models.messages;
 
+import org.codehaus.jackson.JsonNode;
+
 public class UserRegistrationEvent {
 
-	private String userName;
+	private JsonNode userInfo;
 
-	public UserRegistrationEvent(String userName) {
-		this.userName = userName;
+	public UserRegistrationEvent(JsonNode userInfo) {
+		this.userInfo = userInfo;
 	}
 	
 	
-	public String userName() {
-		return userName;
+	public JsonNode userInfo() {
+		return userInfo;
 	}
 }

@@ -1,16 +1,18 @@
 package controllers;
 
-import static models.Functions.jsonToResult;
 import static models.EventPublisher.publisher;
+import static models.Twitter.registeredUserProfile;
 import static models.Twitter.retriveRequestToken;
-import static models.Twitter.userSettings;
+import models.SessionType;
 import models.Submission;
 import models.messages.CloseConnectionEvent;
 import models.messages.NewConnectionEvent;
+import models.messages.UserRegistrationEvent;
 
 import org.codehaus.jackson.JsonNode;
 
 import play.data.Form;
+import play.libs.F.Callback;
 import play.libs.F.Callback0;
 import play.libs.F.Promise;
 import play.libs.F.Tuple;
@@ -18,7 +20,8 @@ import play.libs.OAuth.RequestToken;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
-import views.html.*;
+import views.html.index;
+import views.html.newProposal;
 
 public class Application extends Controller {
 
@@ -36,11 +39,14 @@ public class Application extends Controller {
 		RequestToken token = new RequestToken(flash("request_token"),
 				flash("request_secret"));
 		String authVerifier = request().getQueryString("oauth_verifier");
-		Promise<JsonNode> settings = userSettings(token, authVerifier);
-		// notify that user signed.
-		publisher.tell("New user signed", null);
-		return async(settings.map(jsonToResult));
-
+		Promise<JsonNode> userProfile = registeredUserProfile(token, authVerifier);
+		userProfile.onRedeem(new Callback<JsonNode>() {
+			@Override
+			public void invoke(JsonNode json) throws Throwable {
+			  publisher.tell(new UserRegistrationEvent(json), null);
+			}
+		});
+		return redirect(routes.Application.index());
 	}
 
 	public static WebSocket<JsonNode> messageBoard(final String uuid) {
@@ -61,7 +67,8 @@ public class Application extends Controller {
 	}
 
 	public static Result index() {
-		return ok(index.render());
+		Submission s = Submission.find.where().eq("type", SessionType.Keynote).findUnique();
+		return ok(index.render(s));
 	}
 
 	public static Result newProposal() {

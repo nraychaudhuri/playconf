@@ -17,7 +17,7 @@ public class Global extends GlobalSettings {
 		Akka.system()
 				.scheduler()
 				.schedule(Duration.create(1, TimeUnit.SECONDS),
-						Duration.create(2, TimeUnit.SECONDS),
+						Duration.create(10, TimeUnit.SECONDS),
 						new Runnable() {
 							public void run() {
 								EventPublisher.publisher.tell(new RandomlySelectTalkEvent(), null);

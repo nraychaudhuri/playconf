@@ -1,4 +1,48 @@
-@main("PlayConf 2014") {
+@(keynote: models.Submission)
+
+@scripts = {
+@defining(java.util.UUID.randomUUID.toString) { uuid =>	
+  <script>
+    $(document).ready(function() {
+      var websocket = new WebSocket("@routes.Application.messageBoard(uuid).webSocketURL(request)");
+      websocket.onmessage = function(evt) {      	 
+        var json = JSON.parse(evt.data);
+        if(json.messageType == "proposalSubmission") {
+        	  showProposal(json);        	
+        	}
+        	if(json.messageType == "registeredUser") {
+          showRegisteredUser(json);        
+        }
+      };
+      websocket.onerror = function(evt) {
+        alert("error " + evt); 
+      };
+    });
+    
+    function showRegisteredUser(json) {
+    	  var article = $("#buzz").find("article:first").remove();
+    	  $(article).find("#registeredUserPictureUrl").attr('src', json.pictureUrl);
+    	  $(article).find("#registerdUserName").html(json.name);
+    	  $(article).find("#registerdUserTwitterId").html(json.twitterId);
+    	  $(article).find("#registeredUserDesc").html(json.description);
+    	  $("#buzz").find("article:last").after(article)
+    	}
+    	
+    function showProposal(json) {
+    	  $("#speakerImage").attr('src', json.pictureUrl);
+      $("#speakerName").html(json.name);
+      $("#twitterId").attr('href', "https://twitter.com/" + json.twitterId);
+      $("#twitterId").html("@@" + json.twitterId);
+      $("#title").html(json.title);
+      $("#proposal").html(json.proposal);
+      //$("#followerCount").html("followers:" + json.followerCount);
+    	}
+  </script>
+  }
+}
+
+
+@main("PlayConf 2014", scripts) {
     <section id="speakers" class="clear">
       <header>
         <h1>Speakers</h1>
@@ -10,15 +54,11 @@
       <article>
         <ul>
           <li>
-            <img src="assets/images/fake-speaker.png">
-            <h2>Guillaume Bort</h2>
-            <a href="#" class="twitter">@@guillaumebort</a>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <img id="speakerImage" src="@keynote.speaker.pictureUrl">
+            <h2 id="speakerName">@keynote.speaker.name</h2>
+            <a id="twitterId" href="https://twitter.com/@keynote.speaker.twitterId" class="twitter">@keynote.speaker.twitterId</a>
+            <h3 id="title">Keynote - @keynote.title</h3>
+            <p id="proposal">@keynote.proposal</p>
           </li>
         </ul>
       </article>
@@ -27,41 +67,41 @@
       <h1>Buzz</h1>
       <article>
         <div class="author">
-          <img src="assets/images/fake-speaker.png">
-          <h2>Guillaume Bort</h2>
-          <a href="#" class="twitter">@@guillaumebort</a>
+          <img id="registeredUserPictureUrl" src="assets/images/fake-speaker.png">
+          <h2 id="registerdUserName">Guillaume Bort</h2>
+          <a id="registerdUserTwitterId" href="#" class="twitter">@@guillaumebort</a>
         </div>
-        <div class="content">
+        <div id="registeredUserDesc" class="content">
           Le code de notre session live coding avec @@Sadache pour #DevoxxFR – <a href="https://github.com/">https://github.com/guillaumebort/devoxxfr2013</a>
         </div>
       </article>
       <article>
         <div class="author">
-          <img src="assets/images/fake-speaker.png">
-          <h2>Guillaume Bort</h2>
-          <a href="#" class="twitter">@@guillaumebort</a>
+          <img id="registeredUserPictureUrl" src="assets/images/fake-speaker.png">
+          <h2 id="registerdUserName">Guillaume Bort</h2>
+          <a id="registerdUserTwitterId" href="#" class="twitter">@@guillaumebort</a>
         </div>
-        <div class="content">
+        <div id="registeredUserDesc" class="content">
           Le code de notre session live coding avec @@Sadache pour #DevoxxFR – <a href="https://github.com/">https://github.com/guillaumebort/devoxxfr2013</a>
         </div>
       </article>
       <article>
         <div class="author">
-          <img src="assets/images/fake-speaker.png">
-          <h2>Guillaume Bort</h2>
-          <a href="#" class="twitter">@@guillaumebort</a>
+          <img id="registeredUserPictureUrl" src="assets/images/fake-speaker.png">
+          <h2 id="registerdUserName">Guillaume Bort</h2>
+          <a id="registerdUserTwitterId" href="#" class="twitter">@@guillaumebort</a>
         </div>
-        <div class="content">
+        <div id="registeredUserDesc" class="content">
           Le code de notre session live coding avec @@Sadache pour #DevoxxFR – <a href="https://github.com/">https://github.com/guillaumebort/devoxxfr2013</a>
         </div>
       </article>
       <article>
         <div class="author">
-          <img src="assets/images/fake-speaker.png">
-          <h2>Guillaume Bort</h2>
-          <a href="#" class="twitter">@@guillaumebort</a>
+          <img id="registeredUserPictureUrl" src="assets/images/fake-speaker.png">
+          <h2 id="registerdUserName">Guillaume Bort</h2>
+          <a id="registerdUserTwitterId" href="#" class="twitter">@@guillaumebort</a>
         </div>
-        <div class="content">
+        <div id="registeredUserDesc" class="content">
           Le code de notre session live coding avec @@Sadache pour #DevoxxFR – <a href="https://github.com/">https://github.com/guillaumebort/devoxxfr2013</a>
         </div>
       </article>

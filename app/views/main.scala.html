@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(title: String, scripts: Html = Html(""))(content: Html)
 <!DOCTYPE html>
 <html>
   <head>
@@ -19,7 +19,7 @@
       </div>
     </header>
     <aside id="register">
-      <a class="button white" href="#">Register</a>
+      <a class="button white" href="@routes.Application.register()">Register</a>
       Sign in with your twitter account
     </aside>
       @content
@@ -29,5 +29,6 @@
 
     <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript" charset="utf-8"></script>
     <script src="@routes.Assets.at("javascripts/home.js")" type="text/javascript" charset="utf-8"></script>
+    @scripts
   </body>
 </html>

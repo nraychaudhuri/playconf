@@ -1,13 +1,17 @@
 package models;
 
-import static models.Functions.*;
+import static models.Functions.error;
+import static models.Functions.findTextElement;
+import static models.Functions.responseToJson;
 
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.ObjectNode;
 
 import play.libs.F;
 import play.libs.F.Function;
 import play.libs.F.Promise;
 import play.libs.F.Tuple;
+import play.libs.Json;
 import play.libs.OAuth;
 import play.libs.OAuth.ConsumerKey;
 import play.libs.OAuth.OAuthCalculator;
@@ -22,42 +26,71 @@ import com.ning.http.util.Base64;
 public class Twitter {
 	private static String consumerKey = "ZH15OspjNAfn5cyfLGm8KA";
 	private static String consumerSecret = "IKgL5u3KORkRDh9Ay78iBhrl3N4JWbQXxazCJNc";
-	
-	private static ConsumerKey key = new ConsumerKey(consumerKey, consumerSecret);
-	
+
+	private static ConsumerKey key = new ConsumerKey(consumerKey,
+			consumerSecret);
+
 	private static OAuth oauthHelper = new OAuth(new ServiceInfo(
-		    "https://api.twitter.com/oauth/request_token",
-		    "https://api.twitter.com/oauth/access_token",
-		    "https://api.twitter.com/oauth/authorize", key), true);
+			"https://api.twitter.com/oauth/request_token",
+			"https://api.twitter.com/oauth/access_token",
+			"https://api.twitter.com/oauth/authorize", key), true);
 
-	public static Tuple<String, RequestToken> retriveRequestToken(String callback) {
-	  RequestToken tr = oauthHelper.retrieveRequestToken(callback);	
-	  return new F.Tuple<String, RequestToken>(oauthHelper.redirectUrl(tr.token), tr);
+	public static Tuple<String, RequestToken> retriveRequestToken(
+			String callback) {
+		RequestToken tr = oauthHelper.retrieveRequestToken(callback);
+		return new F.Tuple<String, RequestToken>(
+				oauthHelper.redirectUrl(tr.token), tr);
 	}
-	
-	public static Promise<JsonNode> userSettings(RequestToken token, String authVerifier) {
-	   RequestToken rt = oauthHelper.retrieveAccessToken(token, authVerifier);	
-	   WSRequestHolder req = WS.url("https://api.twitter.com/1.1/account/settings.json").sign(new OAuthCalculator(key, rt));
-	   return req.get().map(responseToJson);
+
+//	public static Promise<Long> findFollowers(final String screenName) {
+//		return userProfile(screenName).map(findLongElement("followers_count"));
+//	}
+
+	public static Promise<JsonNode> registeredUserProfile(RequestToken token,
+			String authVerifier) {
+		RequestToken rt = oauthHelper.retrieveAccessToken(token, authVerifier);
+		WSRequestHolder req = WS.url(
+				"https://api.twitter.com/1.1/account/settings.json").sign(
+				new OAuthCalculator(key, rt));
+		Promise<String> screenName = req.get().map(responseToJson)
+				.map(findTextElement("screen_name"));
+		return screenName.flatMap(userProfile).map(extractRegisteredInfo);
 	}
-	
-	public static Promise<JsonNode> userProfile(final String screenName) {
-		Promise<Response> response = authenticateApplication();
-		return response.map(responseToJson).map(findTextElement("access_token")).flatMap(new Function<String, Promise<JsonNode>>() {
+
+	public static Function<JsonNode, JsonNode> extractRegisteredInfo = new Function<JsonNode, JsonNode>() {
+		public JsonNode apply(JsonNode twitterJson) {
+			final ObjectNode result = Json.newObject();
+			result.put("messageType", "registeredUser");
+			result.put("name", twitterJson.findPath("name").asText());
+			result.put("twitterId", twitterJson.findPath("screen_name")
+					.asText());
+			result.put("description", twitterJson.findPath("description")
+					.asText());
+			result.put("pictureUrl", twitterJson.findPath("profile_image_url")
+					.asText());
+			return result;
+		}
+	};
+
+	public static Function<String, Promise<JsonNode>> userProfile = new Function<String,Promise<JsonNode>>() {
+		public Promise<JsonNode> apply(final String screenName) {
+			Promise<String> response = authenticateApplication()
+				.map(responseToJson).map(findTextElement("access_token"));
+			return response.flatMap(fetchProfile(screenName)).recover(error);
+	    }
+	};
+
+	private static Function<String, Promise<JsonNode>> fetchProfile(final String screenName) {
+		return new Function<String, Promise<JsonNode>>() {
 			public Promise<JsonNode> apply(String accessToken) {
-				return userProfile(screenName, accessToken);
+			   WSRequestHolder req = WS
+				 .url("https://api.twitter.com/1.1/users/show.json")
+				 .setQueryParameter("screen_name", screenName)
+				 .setHeader("Authorization", "Bearer " + accessToken);
+				 Promise<Response> promise = req.get();
+				 return promise.map(responseToJson);
 			}
-		});
-	}
-
-	private static Promise<JsonNode> userProfile(final String screenName,
-			String accessToken) {
-		WSRequestHolder req = WS
-				.url("https://api.twitter.com/1.1/users/show.json")
-				.setQueryParameter("screen_name", screenName)
-				.setHeader("Authorization", "Bearer " + accessToken);
-		Promise<Response> promise = req.get();
-		return promise.map(responseToJson);
+		};
 	}
 
 	private static Promise<Response> authenticateApplication() {
@@ -70,7 +103,6 @@ public class Twitter {
 	}
 
 	private static String bearerToken() {
-		return Base64.encode((consumerKey + ":" + consumerSecret)
-				.getBytes());
+		return Base64.encode((consumerKey + ":" + consumerSecret).getBytes());
 	}
 }
