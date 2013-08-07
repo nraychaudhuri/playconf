@@ -1,17 +1,15 @@
-package models;
+package common;
 
-import static models.Functions.error;
-import static models.Functions.findTextElement;
-import static models.Functions.responseToJson;
+import static common.Functions.error;
+import static common.Functions.findTextElement;
+import static common.Functions.responseToJson;
 
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ObjectNode;
 
 import play.libs.F;
 import play.libs.F.Function;
 import play.libs.F.Promise;
 import play.libs.F.Tuple;
-import play.libs.Json;
 import play.libs.OAuth;
 import play.libs.OAuth.ConsumerKey;
 import play.libs.OAuth.OAuthCalculator;

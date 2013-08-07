@@ -23,36 +23,36 @@ public class Submission extends Model {
 
 	@Id
 	public Long id;
-	
+
 	@Required
 	public String title;
-		
+
 	@Required
 	@MinLength(value = 10)
 	@MaxLength(value = 1000)
 	@Column(length = 1000)
 	public String proposal;
-	
+
 	@Required
 	public SessionType type = SessionType.OneHourTalk;
-	
+
 	@Required
 	public Boolean isApproved = false;
-    
-    public String keywords;
 
-    @Required
-    @OneToOne(cascade=CascadeType.ALL)
-    public Speaker speaker;
-    
-    public void save() {
-      	
-      Ebean.save(this);	
-    }
-    
-    public static Finder<Long, Submission> find = 
-       new Finder<Long, Submission>(Long.class, Submission.class); 
-    
+	public String keywords;
+
+	@Required
+	@OneToOne(cascade = CascadeType.ALL)
+	public Speaker speaker;
+
+	public void save() {
+
+		Ebean.save(this);
+	}
+
+	public static Finder<Long, Submission> find = new Finder<Long, Submission>(
+			Long.class, Submission.class);
+
 	public static Promise<Submission> randomlyPickSession() {
 		Promise<Submission> promiseOfSubmission = play.libs.Akka
 				.future(new Callable<Submission>() {
@@ -64,5 +64,8 @@ public class Submission extends Model {
 				});
 		return promiseOfSubmission;
 	}
-}
 
+	public static Submission findKeynote() {
+	  return find.where().eq("type", SessionType.Keynote).findUnique();
+	}
+}

@@ -9,6 +9,8 @@ GET    /pushChannel/:uuid  controllers.Application.messageBoard(uuid)
 
 GET    /register       controllers.Application.register()
 
+POST   /recentUsers/:count   controllers.Application.recentUsers(count: Int)
+
 GET    /register_callback  controllers.Application.register_callback()
 
 GET    /new            controllers.Application.newProposal()

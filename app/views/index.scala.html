@@ -1,5 +1,6 @@
 @(keynote: models.Submission)
 
+@import helper._
 @scripts = {
 @defining(java.util.UUID.randomUUID.toString) { uuid =>	
   <script>
@@ -17,9 +18,17 @@
           showNewProposal(json);        
         }
       };
+      
+      websocket.onopen = function() {
+	      jsRoutes.controllers.Application.recentUsers(4).ajax({
+	    		success : function(data) {
+	    		   $( "#buzzHeader" ).css('color', '#7CB232');; 
+	    		}
+		  });
+      }
       websocket.onerror = function(evt) {
         alert("error " + evt); 
-      };
+      };      
     });
     
     function showRegisteredUser(json) {
@@ -29,6 +38,7 @@
     	  $(article).find("#registerdUserTwitterId").html(json.twitterId);
     	  $(article).find("#registeredUserDesc").html(json.description);
     	  $("#buzz").find("article:last").after(article)
+    	  $(article).css("display", "block");
     	}
 
     function showNewProposal(json) {
@@ -57,9 +67,8 @@
     <section id="speakers" class="clear">
       <header>
         <h1>Speakers</h1>
-        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse
-        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-        proident, sunt in culpa qui officia deserunt molli.</p>
+        <p>Are you using the Play framework to build your application and want to share your experience with
+        others? Please go ahead and submit your talk.</p>
         <a href="@routes.Application.newProposal()" class="button green">Submit your proposal</a>
       </header>
       <article>
@@ -75,7 +84,7 @@
       </article>
     </section>
     <section id="buzz" class="clear">
-      <h1>Buzz</h1>
+      <h1 id="buzzHeader">Buzz</h1>
       <article>
         <div class="author">
           <img id="registeredUserPictureUrl" src="assets/images/fake-speaker.png">

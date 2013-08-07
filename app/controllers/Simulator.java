@@ -1,15 +1,17 @@
 package controllers;
 
-import static models.EventPublisher.publisher;
+import static common.EventPublisher.publisher;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import models.Twitter;
+import models.RegisteredUser;
 import models.messages.UserRegistrationEvent;
 
 import org.codehaus.jackson.JsonNode;
+
+import common.Twitter;
 
 import play.libs.Akka;
 import play.libs.F.Callback;
@@ -55,9 +57,8 @@ public class Simulator extends Controller {
 					new Callback<JsonNode>() {
 						@Override
 						public void invoke(JsonNode json) throws Throwable {
-							System.out.println("Sending registration event "
-									+ json);
-							publisher.tell(new UserRegistrationEvent(json),
+							RegisteredUser u = RegisteredUser.fromJson(json);
+							publisher.tell(new UserRegistrationEvent(u),
 									null);
 						}
 					});

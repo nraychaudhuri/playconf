@@ -3,6 +3,16 @@
 
 # --- !Ups
 
+create table registered_user (
+  id                        bigint not null,
+  name                      varchar(255),
+  twitter_id                varchar(255),
+  description               varchar(255),
+  picture_url               varchar(255),
+  registration_date         date,
+  constraint pk_registered_user primary key (id))
+;
+
 create table speaker (
   id                        bigint not null,
   name                      varchar(255),
@@ -25,6 +35,8 @@ create table submission (
   constraint pk_submission primary key (id))
 ;
 
+create sequence registered_user_seq;
+
 create sequence speaker_seq;
 
 create sequence submission_seq;
@@ -38,11 +50,15 @@ create index ix_submission_speaker_1 on submission (speaker_id);
 
 SET REFERENTIAL_INTEGRITY FALSE;
 
+drop table if exists registered_user;
+
 drop table if exists speaker;
 
 drop table if exists submission;
 
 SET REFERENTIAL_INTEGRITY TRUE;
+
+drop sequence if exists registered_user_seq;
 
 drop sequence if exists speaker_seq;
 

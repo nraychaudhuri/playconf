@@ -1,9 +1,9 @@
 package controllers;
 
-import static models.EventPublisher.publisher;
-import static models.Twitter.registeredUserProfile;
-import static models.Twitter.retriveRequestToken;
-import models.SessionType;
+import static common.EventPublisher.publisher;
+import static common.Twitter.registeredUserProfile;
+import static common.Twitter.retriveRequestToken;
+import models.RegisteredUser;
 import models.Submission;
 import models.messages.CloseConnectionEvent;
 import models.messages.NewConnectionEvent;
@@ -17,12 +17,14 @@ import play.libs.F.Callback;
 import play.libs.F.Callback0;
 import play.libs.F.Promise;
 import play.libs.F.Tuple;
+import play.libs.Json;
 import play.libs.OAuth.RequestToken;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
 import views.html.index;
 import views.html.newProposal;
+import java.util.List;
 
 public class Application extends Controller {
 
@@ -44,7 +46,9 @@ public class Application extends Controller {
 		userProfile.onRedeem(new Callback<JsonNode>() {
 			@Override
 			public void invoke(JsonNode twitterJson) throws Throwable {
-			  publisher.tell(new UserRegistrationEvent(twitterJson), null);
+			  RegisteredUser ru = RegisteredUser.fromJson(twitterJson);	
+			  ru.save();
+			  publisher.tell(new UserRegistrationEvent(ru), null);
 			}
 		});
 		return redirect(routes.Application.index());
@@ -67,12 +71,19 @@ public class Application extends Controller {
 	}
 
 	public static Result index() {
-		Submission s = Submission.find.where().eq("type", SessionType.Keynote).findUnique();
-		return ok(index.render(s));
+	  return ok(index.render(Submission.findKeynote()));
 	}
 
 	public static Result newProposal() {
-		return ok(newProposal.render(form));
+	  return ok(newProposal.render(form));
+	}
+	
+	public static Result recentUsers(int count) {
+		List<RegisteredUser> users = RegisteredUser.recentUsers(count);
+		for (RegisteredUser ru: users) {
+			publisher.tell(new UserRegistrationEvent(ru), null);
+		}
+		return ok("Done");
 	}
 
 	public static Result submitProposal() {

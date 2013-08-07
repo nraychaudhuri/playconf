@@ -2,7 +2,8 @@ package global;
 
 import java.util.concurrent.TimeUnit;
 
-import models.EventPublisher;
+import common.EventPublisher;
+
 import models.Submission;
 import models.messages.RandomlySelectTalkEvent;
 import play.Application;
