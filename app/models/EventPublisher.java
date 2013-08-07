@@ -1,22 +1,18 @@
 package models;
 
-import static models.Functions.makeResult;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import models.messages.CloseConnectionEvent;
 import models.messages.NewConnectionEvent;
+import models.messages.NewSubmissionEvent;
 import models.messages.RandomlySelectTalkEvent;
-import models.messages.TalkSubmissionEvent;
 import models.messages.UserRegistrationEvent;
 
 import org.codehaus.jackson.JsonNode;
 
 import play.Logger;
 import play.libs.Akka;
-import play.libs.F.Callback;
-import play.libs.F.Promise;
 import play.mvc.WebSocket.Out;
 import akka.actor.ActorRef;
 import akka.actor.Props;
@@ -45,26 +41,22 @@ public class EventPublisher extends UntypedActor {
 		}
 		if (message instanceof UserRegistrationEvent) {
 			UserRegistrationEvent ure = (UserRegistrationEvent) message;
-			for (Out<JsonNode> out : connections.values()) {
-				out.write(ure.userInfo());
-			}
+			sendEvent(ure.json());
 		}
 		if (message instanceof RandomlySelectTalkEvent) {
-			Promise<JsonNode> promiseOfJson = 
-					Submission.randomlyPickSession().flatMap(makeResult);
-		    System.out.println("Select a proposal");
-			promiseOfJson.onRedeem(new Callback<JsonNode>() {
-				@Override
-				public void invoke(JsonNode json) throws Throwable {
-					for (Out<JsonNode> out : connections.values()) {
-						out.write(json);
-					}					
-				}
-			});
+			RandomlySelectTalkEvent rste = (RandomlySelectTalkEvent)message;
+			sendEvent(rste.json());
 		}
-		if (message instanceof TalkSubmissionEvent) {
-
+		if (message instanceof NewSubmissionEvent) {
+          NewSubmissionEvent nse = (NewSubmissionEvent)message;
+          sendEvent(nse.json());
 		} else
 			unhandled(message);
+	}
+
+	private void sendEvent(JsonNode userInfo) {
+		for (Out<JsonNode> out : connections.values()) {
+			out.write(userInfo);
+		}
 	}
 }

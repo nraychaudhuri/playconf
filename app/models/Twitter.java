@@ -42,10 +42,6 @@ public class Twitter {
 				oauthHelper.redirectUrl(tr.token), tr);
 	}
 
-//	public static Promise<Long> findFollowers(final String screenName) {
-//		return userProfile(screenName).map(findLongElement("followers_count"));
-//	}
-
 	public static Promise<JsonNode> registeredUserProfile(RequestToken token,
 			String authVerifier) {
 		RequestToken rt = oauthHelper.retrieveAccessToken(token, authVerifier);
@@ -54,23 +50,8 @@ public class Twitter {
 				new OAuthCalculator(key, rt));
 		Promise<String> screenName = req.get().map(responseToJson)
 				.map(findTextElement("screen_name"));
-		return screenName.flatMap(userProfile).map(extractRegisteredInfo);
+		return screenName.flatMap(userProfile);
 	}
-
-	public static Function<JsonNode, JsonNode> extractRegisteredInfo = new Function<JsonNode, JsonNode>() {
-		public JsonNode apply(JsonNode twitterJson) {
-			final ObjectNode result = Json.newObject();
-			result.put("messageType", "registeredUser");
-			result.put("name", twitterJson.findPath("name").asText());
-			result.put("twitterId", twitterJson.findPath("screen_name")
-					.asText());
-			result.put("description", twitterJson.findPath("description")
-					.asText());
-			result.put("pictureUrl", twitterJson.findPath("profile_image_url")
-					.asText());
-			return result;
-		}
-	};
 
 	public static Function<String, Promise<JsonNode>> userProfile = new Function<String,Promise<JsonNode>>() {
 		public Promise<JsonNode> apply(final String screenName) {

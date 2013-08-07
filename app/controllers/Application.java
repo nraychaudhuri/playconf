@@ -7,6 +7,7 @@ import models.SessionType;
 import models.Submission;
 import models.messages.CloseConnectionEvent;
 import models.messages.NewConnectionEvent;
+import models.messages.NewSubmissionEvent;
 import models.messages.UserRegistrationEvent;
 
 import org.codehaus.jackson.JsonNode;
@@ -42,8 +43,8 @@ public class Application extends Controller {
 		Promise<JsonNode> userProfile = registeredUserProfile(token, authVerifier);
 		userProfile.onRedeem(new Callback<JsonNode>() {
 			@Override
-			public void invoke(JsonNode json) throws Throwable {
-			  publisher.tell(new UserRegistrationEvent(json), null);
+			public void invoke(JsonNode twitterJson) throws Throwable {
+			  publisher.tell(new UserRegistrationEvent(twitterJson), null);
 			}
 		});
 		return redirect(routes.Application.index());
@@ -55,7 +56,6 @@ public class Application extends Controller {
 		public void onReady(WebSocket.In<JsonNode> in,
 				WebSocket.Out<JsonNode> out) {
 			publisher.tell(new NewConnectionEvent(uuid, out), null);
-			
 			in.onClose(new Callback0() {
 				@Override
 				public void invoke() throws Throwable {
@@ -82,6 +82,7 @@ public class Application extends Controller {
 		} else {
 			Submission s = filledForm.get();
 			s.save();
+			publisher.tell(new NewSubmissionEvent(s), null);
 			return redirect(routes.Application.index());
 		}
 	}

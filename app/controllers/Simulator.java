@@ -51,7 +51,7 @@ public class Simulator extends Controller {
 		try {
 			Promise<JsonNode> userProfile = Twitter.userProfile
 					.apply(twitterId);
-			userProfile.map(Twitter.extractRegisteredInfo).onRedeem(
+			userProfile.onRedeem(
 					new Callback<JsonNode>() {
 						@Override
 						public void invoke(JsonNode json) throws Throwable {
