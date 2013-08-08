@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Building reactive web apps using Java and Play framework</title>
+
+		<meta name="description" content="Online Play framework course from Typesafe Inc. All rights reversed.">
+		<meta name="author" content="Nilanjan Raychaudhuri">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/typesafe.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/idea.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section data-state="home" data-background="#92D13D">
+					<h2>Building reactive apps</h1>
+					<h2>in Play framework</h2>
+					<br/>
+					<h4>(Online Play framework course from Typesafe)</h4>
+					<img src="assets/play-logo@2x.png" width="300" alt="play logo"/>
+					<p>
+						<small>Created by <a href="http://www.typesafe.com">Typesafe Inc.</a> / <a href="http://twitter.com/typesafe">@typesafe</a></small>
+					</p>
+				</section>
+				<section>
+				    <section>
+				      <h2>The objective</h2>
+					  <p>
+						To learn how to build reactive web applications in Play framework using Java programming language.
+					  </p>
+					</section>
+					<section>
+				      <h2>What are we building?</h2>
+					  <p>
+					  	We will be building an reactive web application from scratch.  
+					  </p>
+					  <img src="assets/playconf.png" width="500" alt="playconf home page"/>
+
+                    </section>
+                    <section> 
+				      <h2>The outline of the course</h2>
+					  <p>
+                        The course is divided into following six small lessons:					  	  
+					  </p>
+						<ol>
+							<li class="fragment">Meet Play</li>
+							<li class="fragment">From zero to deploy in 15 minutes</li>
+							<li class="fragment">Making the app look pretty</li>
+							<li class="fragment">Its now reactive</li>
+							<li class="fragment">Using REST services</li>
+							<li class="fragment">Time to add tests</li>
+						</ol>
+					</section>
+					<section>
+				      <h2>How to follow along?</h2>
+					  <p>
+						//TODO: Should we recommend some books, exercises. 
+					  </p>
+				    </section>
+				</section>	
+				<section data-background="#92D13D">
+					<h1>Meet Play</h1>
+					<h3>Lesson 1</h3>
+					<img src="assets/play-logo@2x.png" width="300" alt="play logo"/>
+					<p>
+						<small>Created by <a href="http://www.typesafe.com">Typesafe Inc.</a> / <a href="http://twitter.com/typesafe">@typesafe</a></small>
+					</p>
+				</section>
+				<section>
+					<section data-background="#92D13D">
+				      <h2>What is play framework?</h2>
+					  <p>
+						Its a high velocity Reactive web framework for Java and Scala.
+					  </p>
+					</section>
+					<section>
+				      <h2>What is play framework?</h2>
+					  <p>
+						Its a framework for web developers by web developers.
+					  </p>
+					</section>
+					<section>
+				      <h2>What is play framework?</h2>
+					  <p>
+						Its a framework that brings fun back to web application development.
+					  </p>
+					</section>
+				</section>	
+				<section>
+					<section data-background="#92D13D">
+				      <h2>Why Playframework?</h2>
+					  <p class="fragment">
+						It makes building modern web applications for JVM <strong>simple</strong>. 
+					  </p>
+					</section>
+				   <section>
+				      <h2>Developer friendly</h2>
+					  <p>
+						Make your changes and hit refresh!
+					  </p>
+				   </section>
+				   <section>
+				      <h2>Scale predictably</h2>
+					  <p>
+						Under the covers Play is stateless and uses fully asynchronous programming model
+					  </p>
+				   </section>
+				   <section>
+				      <h2>Reactive web and mobile</h2>
+					  <p>
+						Play was built for needs of reactive web & mobile apps.
+					  </p>
+				   </section>
+				</section>	
+				<section>
+				  <section data-background="#7bdcf5">
+					 <h2>Being Reactive</h2>
+					 <img width="500" src="assets/play@2x.png" alt="Play">
+				  </section>
+				  <section>
+				      <h2>The need to go Reactive</h2>
+					  <p>
+						New requirements demand new technologies.
+					  </p>
+				  </section>
+				  <section>
+				      <h2>Reactive applications</h2>
+				      <ol>
+						<li class="fragment">react to events</li>
+						<li class="fragment">react to load</li>
+						<li class="fragment">react to failure</li>
+						<li class="fragment">react to users</li>
+					  </ol>
+				   </section>
+				   <section data-background="#7BDCF5">
+				      <h2>Reactive applications</h2>
+				      </br>
+					  <img width="800" src="assets/full-reactive.png" alt="Reactive application">
+					  <p>
+						<small>More information is available in <a href="http://www.reactivemanifesto.org/">The reactive manifesto.</a> website</small>
+					  </p>
+				   </section>
+				</section>
+				<section>
+					<section data-background="#92D13D">
+				      <h2>Play Architecture</h2>
+					  <p>
+						What makes Play suitable for building Reactive applications?
+					  </p>
+					  <img width="300" src="assets/architecture1.png" alt="architecture logo">
+					</section>
+					<section>
+				      <h2>Under the cover</h2>
+					  <img width="600" src="assets/play_framework.png" alt="play architecture logo">
+					</section>
+				</section>	
+				<section>
+					<section data-background="#92D13D">
+				      <h2>Time to Play</h2>
+				      <a href="http://www.typesafe.com/platform/getstarted">
+				      	<img src="assets/play-icon.png" width="300" alt="play logo"/>
+				      </a>	
+					</section>
+					<section>
+				      <h2>Request flow</h2>
+					  <img width="1000" src="assets/anatomy_of_play.png" alt="anatomy of play">
+					</section>
+				</section>	
+				<section>
+					<h2>Next episode</h2>
+					<p>
+                      We will implement the "Submit a new proposal" usecase and deploy it in cloud.
+					</p>
+					<aside class="notes">
+						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+					</aside>
+				</section>
+				<section>
+					<h1>THE END</h1>
+					<h3>BY Typesafe / typesafe.com</h3>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'linear', // default/cube/page/concave/zoom/linear/fade/none
+ 				backgroundTransition: 'slide',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
