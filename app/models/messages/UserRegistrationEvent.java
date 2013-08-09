@@ -7,7 +7,7 @@ import org.codehaus.jackson.node.ObjectNode;
 
 import play.libs.Json;
 
-public class UserRegistrationEvent {
+public class UserRegistrationEvent implements Event {
 
 	private RegisteredUser user;
 

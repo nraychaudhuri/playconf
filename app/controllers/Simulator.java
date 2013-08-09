@@ -1,7 +1,5 @@
 package controllers;
 
-import static common.EventPublisher.publisher;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -11,14 +9,15 @@ import models.messages.UserRegistrationEvent;
 
 import org.codehaus.jackson.JsonNode;
 
-import common.Twitter;
-
 import play.libs.Akka;
 import play.libs.F.Callback;
 import play.libs.F.Promise;
 import play.mvc.Controller;
 import play.mvc.Result;
 import scala.concurrent.duration.Duration;
+
+import common.Twitter;
+import common.UserActor;
 
 public class Simulator extends Controller {
 
@@ -58,12 +57,11 @@ public class Simulator extends Controller {
 						@Override
 						public void invoke(JsonNode json) throws Throwable {
 							RegisteredUser u = RegisteredUser.fromJson(json);
-							publisher.tell(new UserRegistrationEvent(u),
-									null);
+							UserActor.users().tell(
+									new UserRegistrationEvent(u));
 						}
 					});
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
