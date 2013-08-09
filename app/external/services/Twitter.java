@@ -1,4 +1,4 @@
-package common;
+package external.services;
 
 import static common.Functions.error;
 import static common.Functions.findTextElement;

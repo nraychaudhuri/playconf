@@ -1,4 +1,4 @@
-package models.messages;
+package actors.messages;
 
 import models.Submission;
 
@@ -7,7 +7,7 @@ import org.codehaus.jackson.node.ObjectNode;
 
 import play.libs.Json;
 
-public final class RandomlySelectTalkEvent {
+public final class RandomlySelectTalkEvent implements UserEvent {
 
 	private final Submission submission;
 	public RandomlySelectTalkEvent(Submission s) {

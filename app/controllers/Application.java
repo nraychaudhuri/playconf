@@ -1,30 +1,32 @@
 package controllers;
 
-import static common.EventPublisher.publisher;
-import static common.Twitter.registeredUserProfile;
-import static common.Twitter.retriveRequestToken;
+import static actors.EventPublisher.publisher;
+import static external.services.Twitter.registeredUserProfile;
+import static external.services.Twitter.retriveRequestToken;
+
+import java.util.List;
+
 import models.RegisteredUser;
 import models.Submission;
-import models.messages.CloseConnectionEvent;
-import models.messages.NewConnectionEvent;
-import models.messages.NewSubmissionEvent;
-import models.messages.UserRegistrationEvent;
 
 import org.codehaus.jackson.JsonNode;
+
+import actors.messages.CloseConnectionEvent;
+import actors.messages.NewConnectionEvent;
+import actors.messages.NewSubmissionEvent;
+import actors.messages.UserRegistrationEvent;
 
 import play.data.Form;
 import play.libs.F.Callback;
 import play.libs.F.Callback0;
 import play.libs.F.Promise;
 import play.libs.F.Tuple;
-import play.libs.Json;
 import play.libs.OAuth.RequestToken;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
 import views.html.index;
 import views.html.newProposal;
-import java.util.List;
 
 public class Application extends Controller {
 

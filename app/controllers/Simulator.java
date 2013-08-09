@@ -1,17 +1,18 @@
 package controllers;
 
-import static common.EventPublisher.publisher;
+import static actors.EventPublisher.publisher;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import models.RegisteredUser;
-import models.messages.UserRegistrationEvent;
 
 import org.codehaus.jackson.JsonNode;
 
-import common.Twitter;
+import actors.messages.UserRegistrationEvent;
+
+import external.services.Twitter;
 
 import play.libs.Akka;
 import play.libs.F.Callback;

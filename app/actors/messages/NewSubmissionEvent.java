@@ -1,4 +1,4 @@
-package models.messages;
+package actors.messages;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
@@ -7,7 +7,7 @@ import play.libs.Json;
 
 import models.Submission;
 
-public class NewSubmissionEvent {
+public class NewSubmissionEvent implements UserEvent {
 
 	private final Submission submission;
 

@@ -17,7 +17,7 @@ showProposal = (json) ->
   $("#speakerImage").attr "src", json.pictureUrl
   $("#speakerName").html json.name
   $("#twitterId").attr "href", "https://twitter.com/" + json.twitterId
-  $("#twitterId").html "@@" + json.twitterId
+  $("#twitterId").html json.twitterId
   $("#title").html json.title
   $("#proposal").html json.proposal
 $(document).ready ->

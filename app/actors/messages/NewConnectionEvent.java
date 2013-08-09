@@ -1,4 +1,4 @@
-package models.messages;
+package actors.messages;
 
 import org.codehaus.jackson.JsonNode;
 

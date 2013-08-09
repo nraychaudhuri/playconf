@@ -1,4 +1,4 @@
-package models.messages;
+package actors.messages;
 
 import models.RegisteredUser;
 
@@ -7,7 +7,7 @@ import org.codehaus.jackson.node.ObjectNode;
 
 import play.libs.Json;
 
-public class UserRegistrationEvent {
+public class UserRegistrationEvent implements UserEvent {
 
 	private RegisteredUser user;
 
