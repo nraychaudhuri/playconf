@@ -1,8 +1,6 @@
 package common;
 
-import models.messages.NewSubmissionEvent;
-import models.messages.RandomlySelectTalkEvent;
-import models.messages.UserRegistrationEvent;
+import models.messages.Event;
 
 import org.codehaus.jackson.JsonNode;
 
@@ -26,18 +24,11 @@ public class UserActor extends UntypedActor {
 	
 	@Override
 	public void onReceive(Object message) throws Exception {
-		if (message instanceof UserRegistrationEvent) {
-			UserRegistrationEvent ure = (UserRegistrationEvent) message;
-			out.write(ure.json());
-		}		
-		if (message instanceof RandomlySelectTalkEvent) {
-			RandomlySelectTalkEvent rste = (RandomlySelectTalkEvent)message;
-			out.write(rste.json());
-		}		
-		if (message instanceof NewSubmissionEvent) {
-          NewSubmissionEvent nse = (NewSubmissionEvent)message;
-          out.write(nse.json());
-		} else
-			unhandled(message);
+		if (message instanceof Event) {
+			Event e = (Event) message;
+			out.write(e.json());
+		} else {
+			unhandled(message);			
+		}
 	}
 }

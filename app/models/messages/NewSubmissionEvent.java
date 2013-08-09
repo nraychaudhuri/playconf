@@ -7,7 +7,7 @@ import play.libs.Json;
 
 import models.Submission;
 
-public class NewSubmissionEvent {
+public class NewSubmissionEvent implements Event {
 
 	private final Submission submission;
 

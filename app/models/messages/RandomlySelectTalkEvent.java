@@ -7,7 +7,7 @@ import org.codehaus.jackson.node.ObjectNode;
 
 import play.libs.Json;
 
-public final class RandomlySelectTalkEvent {
+public final class RandomlySelectTalkEvent implements Event {
 
 	private final Submission submission;
 	public RandomlySelectTalkEvent(Submission s) {
