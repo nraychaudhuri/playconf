@@ -1,30 +1,39 @@
 package controllers;
 
-import static common.EventPublisher.publisher;
+//import static common.EventPublisher.publisher;
 import static common.Twitter.registeredUserProfile;
 import static common.Twitter.retriveRequestToken;
+
+import java.util.List;
+
 import models.RegisteredUser;
 import models.Submission;
-import models.messages.CloseConnectionEvent;
-import models.messages.NewConnectionEvent;
 import models.messages.NewSubmissionEvent;
 import models.messages.UserRegistrationEvent;
 
 import org.codehaus.jackson.JsonNode;
 
+import play.Logger;
 import play.data.Form;
+import play.libs.Akka;
 import play.libs.F.Callback;
 import play.libs.F.Callback0;
 import play.libs.F.Promise;
 import play.libs.F.Tuple;
-import play.libs.Json;
 import play.libs.OAuth.RequestToken;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
+import play.mvc.WebSocket.Out;
 import views.html.index;
 import views.html.newProposal;
-import java.util.List;
+import akka.actor.ActorRef;
+import akka.actor.PoisonPill;
+import akka.actor.Props;
+import akka.actor.UntypedActor;
+import akka.actor.UntypedActorFactory;
+
+import common.UserActor;
 
 public class Application extends Controller {
 
@@ -42,13 +51,14 @@ public class Application extends Controller {
 		RequestToken token = new RequestToken(flash("request_token"),
 				flash("request_secret"));
 		String authVerifier = request().getQueryString("oauth_verifier");
-		Promise<JsonNode> userProfile = registeredUserProfile(token, authVerifier);
+		Promise<JsonNode> userProfile = registeredUserProfile(token,
+				authVerifier);
 		userProfile.onRedeem(new Callback<JsonNode>() {
 			@Override
 			public void invoke(JsonNode twitterJson) throws Throwable {
-			  RegisteredUser ru = RegisteredUser.fromJson(twitterJson);	
-			  ru.save();
-			  publisher.tell(new UserRegistrationEvent(ru), null);
+				RegisteredUser ru = RegisteredUser.fromJson(twitterJson);
+				ru.save();
+				UserActor.users().tell(new UserRegistrationEvent(ru));
 			}
 		});
 		return redirect(routes.Application.index());
@@ -56,33 +66,44 @@ public class Application extends Controller {
 
 	public static WebSocket<JsonNode> messageBoard(final String uuid) {
 	  return new WebSocket<JsonNode>() {
-		// Called when the Websocket Handshake is done.
-		public void onReady(WebSocket.In<JsonNode> in,
-				WebSocket.Out<JsonNode> out) {
-			publisher.tell(new NewConnectionEvent(uuid, out), null);
-			in.onClose(new Callback0() {
-				@Override
-				public void invoke() throws Throwable {
-					publisher.tell(new CloseConnectionEvent(uuid), null);
-				}
-			});
-		}
-	  };
+			public void onReady(WebSocket.In<JsonNode> in,
+					WebSocket.Out<JsonNode> out) {
+				final ActorRef userActor = createUserActor(uuid, out);				
+				in.onClose(new Callback0() {
+					@Override
+					public void invoke() throws Throwable {
+						Logger.info("Browser disconnected");
+						userActor.tell(PoisonPill.getInstance(), null);
+					}
+				});
+			}
+		  };
 	}
 
+	private static ActorRef createUserActor(String uuid, final Out<JsonNode> out) {
+		ActorRef userActor = Akka.system().actorOf(
+		  new Props(new UntypedActorFactory() {
+			public UntypedActor create() {
+				return new UserActor(out);
+			}
+		}), "user" + uuid);
+		
+		return userActor;
+	}
+	
 	public static Result index() {
-	  return ok(index.render(Submission.findKeynote()));
+		return ok(index.render(Submission.findKeynote()));
 	}
 
 	public static Result newProposal() {
-	  return ok(newProposal.render(form));
+		return ok(newProposal.render(form));
 	}
-	
+
 	public static Result recentUsers(int count) {
 		List<RegisteredUser> users = RegisteredUser.recentUsers(count);
-		for (RegisteredUser ru: users) {
-			publisher.tell(new UserRegistrationEvent(ru), null);
-		}
+		for (RegisteredUser ru : users) {
+			UserActor.users().tell(new UserRegistrationEvent(ru));
+		}		
 		return ok("Done");
 	}
 
@@ -93,10 +114,9 @@ public class Application extends Controller {
 		} else {
 			Submission s = filledForm.get();
 			s.save();
-			publisher.tell(new NewSubmissionEvent(s), null);
+			UserActor.users().tell(new NewSubmissionEvent(s));
 			return redirect(routes.Application.index());
 		}
 	}
-
 
 }

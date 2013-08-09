@@ -20,7 +20,7 @@ import akka.actor.UntypedActor;
 
 public class EventPublisher extends UntypedActor {
 
-	public final static ActorRef publisher = Akka.system().actorOf(
+	private final static ActorRef publisher = Akka.system().actorOf(
 			new Props(EventPublisher.class));
 
 	private Map<String, Out<JsonNode>> connections = new HashMap<String, Out<JsonNode>>();

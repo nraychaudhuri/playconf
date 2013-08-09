@@ -2,8 +2,6 @@ package global;
 
 import java.util.concurrent.TimeUnit;
 
-import common.EventPublisher;
-
 import models.Submission;
 import models.messages.RandomlySelectTalkEvent;
 import play.Application;
@@ -12,6 +10,8 @@ import play.libs.Akka;
 import play.libs.F.Callback;
 import play.libs.F.Promise;
 import scala.concurrent.duration.Duration;
+
+import common.UserActor;
 
 public class Global extends GlobalSettings {
 
@@ -29,8 +29,7 @@ public class Global extends GlobalSettings {
 								promiseOfJson.onRedeem(new Callback<Submission>() {
 									@Override
 									public void invoke(Submission s) throws Throwable {
-										EventPublisher.publisher.tell(
-												new RandomlySelectTalkEvent(s), null);
+									  UserActor.users().tell(new RandomlySelectTalkEvent(s));
 									}
 								});
 
