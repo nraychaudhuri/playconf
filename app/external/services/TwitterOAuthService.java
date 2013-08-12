@@ -4,43 +4,52 @@ import static common.Functions.error;
 import static common.Functions.findTextElement;
 import static common.Functions.responseToJson;
 
+import javax.inject.Singleton;
+
 import org.codehaus.jackson.JsonNode;
 
 import play.libs.F;
+import play.libs.OAuth;
+import play.libs.WS;
 import play.libs.F.Function;
 import play.libs.F.Promise;
 import play.libs.F.Tuple;
-import play.libs.OAuth;
 import play.libs.OAuth.ConsumerKey;
 import play.libs.OAuth.OAuthCalculator;
 import play.libs.OAuth.RequestToken;
 import play.libs.OAuth.ServiceInfo;
-import play.libs.WS;
 import play.libs.WS.Response;
 import play.libs.WS.WSRequestHolder;
 
 import com.ning.http.util.Base64;
 
-public class Twitter {
-	private static String consumerKey = "ZH15OspjNAfn5cyfLGm8KA";
-	private static String consumerSecret = "IKgL5u3KORkRDh9Ay78iBhrl3N4JWbQXxazCJNc";
-
-	private static ConsumerKey key = new ConsumerKey(consumerKey,
-			consumerSecret);
-
-	private static OAuth oauthHelper = new OAuth(new ServiceInfo(
-			"https://api.twitter.com/oauth/request_token",
-			"https://api.twitter.com/oauth/access_token",
-			"https://api.twitter.com/oauth/authorize", key), true);
-
-	public static Tuple<String, RequestToken> retriveRequestToken(
+@Singleton
+public class TwitterOAuthService implements OAuthService {
+	
+	private final String consumerKey;
+	private final String consumerSecret;
+	private final OAuth oauthHelper;	
+	private final ConsumerKey key;
+	
+	public TwitterOAuthService(String consumerKey, String consumerSecret) {
+		this.consumerKey = consumerKey;
+		this.consumerSecret = consumerSecret;
+		this.key = new ConsumerKey(consumerKey,
+				consumerSecret);		
+		this.oauthHelper = new OAuth(new ServiceInfo(
+				"https://api.twitter.com/oauth/request_token",
+				"https://api.twitter.com/oauth/access_token",
+				"https://api.twitter.com/oauth/authorize", key), true);
+		
+	}
+	public Tuple<String, RequestToken> retriveRequestToken(
 			String callback) {
 		RequestToken tr = oauthHelper.retrieveRequestToken(callback);
 		return new F.Tuple<String, RequestToken>(
 				oauthHelper.redirectUrl(tr.token), tr);
 	}
 
-	public static Promise<JsonNode> registeredUserProfile(RequestToken token,
+	public Promise<JsonNode> registeredUserProfile(RequestToken token,
 			String authVerifier) {
 		RequestToken rt = oauthHelper.retrieveAccessToken(token, authVerifier);
 		WSRequestHolder req = WS.url(
@@ -51,7 +60,7 @@ public class Twitter {
 		return screenName.flatMap(userProfile);
 	}
 
-	public static Function<String, Promise<JsonNode>> userProfile = new Function<String,Promise<JsonNode>>() {
+	public Function<String, Promise<JsonNode>> userProfile = new Function<String,Promise<JsonNode>>() {
 		public Promise<JsonNode> apply(final String screenName) {
 			Promise<String> response = authenticateApplication()
 				.map(responseToJson).map(findTextElement("access_token"));
@@ -72,7 +81,7 @@ public class Twitter {
 		};
 	}
 
-	private static Promise<Response> authenticateApplication() {
+	private Promise<Response> authenticateApplication() {
 		WSRequestHolder req = WS
 				.url("https://api.twitter.com/oauth2/token")
 				.setHeader("Authorization", "Basic " + bearerToken())
@@ -81,7 +90,8 @@ public class Twitter {
 		return req.post("grant_type=client_credentials");
 	}
 
-	private static String bearerToken() {
+	private String bearerToken() {
 		return Base64.encode((consumerKey + ":" + consumerSecret).getBytes());
 	}
+
 }

@@ -12,7 +12,10 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     javaCore,
     javaJdbc,
-    javaEbean
+    javaEbean,
+    "com.google.inject" % "guice" % "3.0",
+    "javax.inject" % "javax.inject" % "1",
+    "org.mockito" % "mockito-core" % "1.9.5" % "test"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
