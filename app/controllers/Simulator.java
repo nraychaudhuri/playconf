@@ -10,16 +10,17 @@ import models.RegisteredUser;
 
 import org.codehaus.jackson.JsonNode;
 
-import actors.messages.UserRegistrationEvent;
-
-import external.services.Twitter;
-
+import play.Logger;
 import play.libs.Akka;
 import play.libs.F.Callback;
 import play.libs.F.Promise;
 import play.mvc.Controller;
 import play.mvc.Result;
 import scala.concurrent.duration.Duration;
+import actors.messages.UserRegistrationEvent;
+import external.services.OAuthService;
+import external.services.TwitterOAuthService;
+import global.Global;
 
 public class Simulator extends Controller {
 
@@ -52,20 +53,17 @@ public class Simulator extends Controller {
 
 	private static void fireUserRegistrationEvent(String twitterId) {
 		try {
-			Promise<JsonNode> userProfile = Twitter.userProfile
-					.apply(twitterId);
-			userProfile.onRedeem(
-					new Callback<JsonNode>() {
-						@Override
-						public void invoke(JsonNode json) throws Throwable {
-							RegisteredUser u = RegisteredUser.fromJson(json);
-							publisher.tell(new UserRegistrationEvent(u),
-									null);
-						}
-					});
+			Promise<JsonNode> userProfile = 
+					((TwitterOAuthService)Global.injector.getInstance(OAuthService.class)).userProfile.apply(twitterId);
+			userProfile.onRedeem(new Callback<JsonNode>() {
+				@Override
+				public void invoke(JsonNode json) throws Throwable {
+					RegisteredUser u = RegisteredUser.fromJson(json);
+					publisher.tell(new UserRegistrationEvent(u), null);
+				}
+			});
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.error("Something went wrong", e);
 		}
 	}
 }
