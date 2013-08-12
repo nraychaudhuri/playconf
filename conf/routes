@@ -3,19 +3,19 @@
 # ~~~~
 
 # Home page
-GET    /               controllers.Application.index()
+GET    /               @controllers.Application.index()
 
-GET    /pushChannel/:uuid  controllers.Application.messageBoard(uuid)
+GET    /pushChannel/:uuid  @controllers.Application.messageBoard(uuid)
 
-GET    /register       controllers.Application.register()
+GET    /register       @controllers.Application.register()
 
-POST   /recentUsers/:count   controllers.Application.recentUsers(count: Int)
+POST   /recentUsers/:count   @controllers.Application.recentUsers(count: Int)
 
-GET    /register_callback  controllers.Application.register_callback()
+GET    /register_callback  @controllers.Application.register_callback()
 
-GET    /new            controllers.Application.newProposal()
+GET    /new            @controllers.Application.newProposal()
   
-POST   /submit         controllers.Application.submitProposal()  
+POST   /submit         @controllers.Application.submitProposal()  
 
 
 #For testing
