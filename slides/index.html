@@ -200,9 +200,151 @@
 					<p>
                       We will implement the "Submit a new proposal" usecase and deploy it in cloud.
 					</p>
-					<aside class="notes">
-						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
-					</aside>
+				</section>
+				<section data-background="#92D13D">
+					<h2>Zero to deploy</h2>
+					<h2>in 15 mins</h2>
+					<br/>
+					<h3>Lesson 2</h3>
+					<img src="assets/play-logo@2x.png" width="300" alt="play logo"/>
+					<p>
+						<small>Created by <a href="http://www.typesafe.com">Typesafe Inc.</a> / <a href="http://twitter.com/typesafe">@typesafe</a></small>
+					</p>
+				</section>
+				<section>
+			      <h2>PlayConf app</h2>
+			      <br/>
+				  <img src="assets/playconf.png" width="700" alt="playconf home page"/>
+                </section>
+				<section>
+					<section>
+				      <h2>Recap</h2>
+				      <ol>
+						<li class="fragment">Play Framework is a high velocity web framework</li>
+						<li class="fragment">You can use both Scala or Java API</li>
+						<li class="fragment">Improves developer productivity</li>
+						<li class="fragment">Makes it simple to build Reactive web apps</li>
+					  </ol>
+					</section>
+				</section>
+				<section>
+					<h2>Submit a proposal flow</h2>
+					<img src="assets/submit-a-proposal-flow.png" width="800" alt="submit proposal flow"/>
+				</section>	
+				<section>
+					<section data-background="#7bdcf5">
+				      <h2>Accessing SQL database</h2>
+				      <img src="assets/database.png" width="300" alt="database"/>
+					</section>
+					<section>
+				      <h2>Integrating with JPA</h2>
+				      <p>
+				      	Java Persistence API provides a POJO persistence model for object-relational mapping
+				      </p>
+				      <br/>	
+				      <p>
+						<small>Checkout Play JPA <a href="http://www.playframework.com/documentation/2.1.x/JavaJPA">documentation</a> for more info</small>
+					  </p>
+					</section>
+					<section>
+				      <h2>EBean</h2>
+				      <p>Provides a simpler alternative to JPA</p>
+					</section>
+				</section>	
+				<section data-background="#92D13D">
+				   <h2>Creating EBean models</h2>
+				   <br/>				    
+				   <img src="assets/submit-a-proposal-flow-ebean.png" width="800" alt="play logo"/>
+				</section>
+				<section>
+					<section data-background="#7bdcf5">
+					   <h2>HTTP form submission</h2>
+					   <img src="assets/form.png" width="300" alt="play form"/>
+					</section>					
+					<section>
+					   <h2>Defining a form</h2>
+					   <p>Play provides helpers to handle form data submission and validation</p>
+					   <br/>
+					   <pre><code data-trim contenteditable>
+import play.form.data.Form;
+
+//creating the form object
+Form&lt;Submission&gt; form = Form.form(Submission.class);
+
+//validating the form
+if(form.hasErrors()) {
+  return badRequest(newProposal.render(form));
+} else {
+  Submission s = filledForm.get();
+  ...
+}
+   					   </code></pre>
+					</section>					
+					<section>
+					   <h2>Using form templates</h2>
+					   <p>Play helpers to help you render form fields in HTML templates</p>
+					   <pre><code data-trim contenteditable>
+@(submission: Form[Submission])
+
+@helper.form(action = routes.Application.submitProposal()) {   
+  <label>Title</label> 
+  @helper.inputText(submission("title"), args = '_label -> "")
+  <label>Description</label>
+  @helper.textarea(submission("proposal"), args = 'rows -> 4, 
+     'cols -> 50, '_label -> "")
+}
+   					   </code></pre>
+   					   <img src="assets/form-screen.png" width="400" alt="submission form"/>
+
+					</section>					
+				</section>	
+				<section data-background="#92D13D">
+				   <h2>Creating New Proposal screen</h2>
+				   <br/>				    
+				   <img src="assets/submit-a-proposal-flow-form.png" width="800" alt="play logo"/>
+				</section>
+				<section>
+					<section data-background="#7bdcf5">
+				      <h2>Deploying to Cloud</h2>
+				      <img src="assets/play-in-cloud.png" width="500" alt="play in cloud"/>
+					</section>
+					<section>
+				      <h2>Starting Play in production mode</h2>
+				      <br/>
+				      <ol>
+				      	<li>
+				      	  <p>Using the start command</p>
+				      	  <pre><code data-trim contenteditable>
+play start
+   					   </code></pre>
+				      	</li>
+				      	<li>
+				      	  <p>Using the stage command</p>
+				      	  <pre><code data-trim contenteditable>
+play stage
+
+target/start
+   					   </code></pre>
+				      	</li>
+					</section>
+					<section>
+				      <h2>Cloud support</h2>
+				      <p>
+				      	<img src="assets/heroku-logo.png" width="200" alt="heroku"/>
+				      	<img src="assets/cloud-foundry-logo.png" width="200" alt="cloud foundry"/>
+				      	<img src="assets/cloudbees-logo.png" width="200" alt="cloudbees"/>
+					</section>
+				</section>	
+				<section data-background="#92D13D">
+				   <h2>Deploy to Cloudbees</h2>
+				   <br/>				    
+				   <img src="assets/play-cloudbees.png" width="700" alt="play in cloud"/>
+				</section>
+				<section>
+					<h2>Next lesson</h2>
+					<p>
+                      We will explore Play's asset pipeline.We will learn how Play helps working with various types of resources
+					</p>
 				</section>
 				<section>
 					<h1>THE END</h1>
