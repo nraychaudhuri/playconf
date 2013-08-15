@@ -69,7 +69,7 @@
 						<ol>
 							<li class="fragment">Meet Play</li>
 							<li class="fragment">From zero to deploy in 15 minutes</li>
-							<li class="fragment">Making the app look pretty</li>
+							<li class="fragment">Working with Assets</li>
 							<li class="fragment">Its now reactive</li>
 							<li class="fragment">Using REST services</li>
 							<li class="fragment">Time to add tests</li>
@@ -222,7 +222,6 @@
 					  </ol>
 					</section>
 				</section>
-
 				<section>
 			      <h2>PlayConf app</h2>
 			      <br/>
@@ -345,6 +344,127 @@ target/start
 					<h2>Next lesson</h2>
 					<p>
                       We will explore Play's asset pipeline.We will learn how Play helps working with various types of resources
+					</p>
+				</section>
+				<section data-background="#92D13D">
+					<h2>Working with Assets</h2>
+					<br/>
+					<h3>Lesson 3</h3>
+					<img src="assets/play-logo@2x.png" width="300" alt="play logo"/>
+					<p>
+						<small>Created by <a href="http://www.typesafe.com">Typesafe Inc.</a> / <a href="http://twitter.com/typesafe">@typesafe</a></small>
+					</p>
+				</section>
+				<section>
+					<section>
+				      <h2>Recap</h2>
+				      <ol>
+						<li class="fragment">Persisting data using EBean</li>
+						<li class="fragment">Working with Play form helpers</li>
+						<li class="fragment">Deploying to the cloud</li>
+					  </ol>
+					</section>
+				</section>
+				<section>
+			      <h2>Add assets to PlayConf</h2>
+			      <br/>
+				  <img src="assets/playconf.png" width="700" alt="playconf home page"/>
+                </section>
+                <section>
+					<section data-background="#92D13D">
+						<h1>Assets</h1>
+						<br/>
+						<img src="assets/assets.png" width="700" alt="assets"/>
+					</section>
+					<section>
+				      <h2>Unmanaged assets</h2>
+				      <p>These are your application's static resources such as JavaScript, CSS and images.
+				      </p>
+				      <br/>
+					  <pre><code data-trim contenteditable>
+public
+  - javascripts
+  - stylesheets
+  - images 				  	
+	   			      </code></pre>
+	                </section>
+	                <section>
+	                	<h2>Managed assets</h2>
+	                	<p>These are assets that are compiled before they are served to the client</p>  
+	                	<br/>
+	                	<p>
+						 <img src="assets/coffeescript-logo.png" width="200" alt="coffeescript"/>
+						 &nbsp;
+						 <img src="assets/less-logo.png" width="200" alt="less"/>
+						 &nbsp;
+						 <img src="assets/closure-compiler-logo.png" width="150" alt="less"/>
+						 &nbsp;
+						 <img src="assets/sass-logo.gif" width="200" alt="sass"/>
+	                </section>
+	                <section>
+	                	<h2>Asset pipeline</h2>
+						<img src="assets/asset-pipeline.png" width="500" alt="asset pipeline"/>
+	                </section>
+	                <section>
+	                	<h2>Asset Controller</h2>
+	                	<p>Built-in controller to serve public assets.</p>
+	                	<br/>
+	                	<ol>
+	                	<li>Routing assets through Asset controller
+	                	<pre><code>
+
+GET  /assets/*file        controllers.Assets.at(path="/public",file)			  	
+	   			        </code></pre>
+	   			        </li>
+	                	<li>Reverse routing for public assets
+	                	<pre><code>
+
+&lt;script src="@routes.Assets.at("javascripts/jquery.js")"&gt;&lt;/script&gt;
+
+	   			        </code></pre>
+	   			        </li>
+	   			        </ol>	   			        
+	                </section>                
+                </section>
+				<section data-background="#7bdcf5">
+			      <h2>Make app look pretty</h2>
+			      <img src="assets/assets2.png" width="700" alt="assets"/>
+				</section>
+				<section>
+					<section data-background="#92D13D">
+						<h2>Play Global</h2>
+						<p>Allows you to handle global settings for your application</p>
+					</section>
+					<section>
+						<h2>Global settings</h2>
+						<br/>
+						<ol>
+							<li>Intercept application start-up and shutdown</li>
+							<li>Intercept requests</li>
+							<li>Handling action not found</li>
+							<li>Providing an application error page</li>
+						</ol>
+						<br/>
+						<pre><code data-trim contenteditable>
+public class GlobalSettings {
+    public void beforeStart(Application app) {}
+    public void onStart(Application app) {}
+    public void onStop(Application app) {}
+    public Result onError(RequestHeader request, Throwable t) {}    
+    public Action onRequest(Request request, Method actionMethod) {}
+}
+				    	
+	   			        </code></pre>	
+					</section>
+				</section>
+				<section data-background="#7bdcf5">
+			      <h2>Add error page</h2>
+			      <img src="assets/error.png" width="500" alt="error page"/>
+				</section>
+				<section>
+					<h2>Next lesson</h2>
+					<p>
+                      We will make our application Reactive. Don't miss it
 					</p>
 				</section>
 				<section>
