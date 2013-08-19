@@ -11,7 +11,7 @@ GET    /register       @controllers.Application.register()
 
 POST   /recentUsers/:count   @controllers.Application.recentUsers(count: Int)
 
-GET    /register_callback  @controllers.Application.register_callback()
+GET    /register_callback  @controllers.Application.registerCallback()
 
 GET    /new            @controllers.Application.newProposal()
   

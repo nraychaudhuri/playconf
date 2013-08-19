@@ -14,28 +14,28 @@ import play.db.ebean.Model;
 
 @Entity
 public class Speaker extends Model {
-	
-	@Id
-	public Long id;
-	
-	@Required
-	public String name;
 
-	@Required
-	@Email
-	public String email;
+    @Id
+    public Long id;
 
-	@Required
-	@MaxLength(value = 1000)
-	@Column(length = 1000)
-	public String bio;
+    @Required
+    public String name;
 
-	@Required
-	public String pictureUrl;
+    @Required
+    @Email
+    public String email;
 
-	public String twitterId;
-	
-	@OneToMany
-	List<Submission> submissions;
+    @Required
+    @MaxLength(value = 1000)
+    @Column(length = 1000)
+    public String bio;
+
+    @Required
+    public String pictureUrl;
+
+    public String twitterId;
+
+    @OneToMany
+    List<Submission> submissions;
 
 }

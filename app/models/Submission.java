@@ -19,53 +19,58 @@ import com.avaje.ebean.Ebean;
 @Entity
 public class Submission extends Model {
 
-	private static final long serialVersionUID = -2772900967190704959L;
+    private static final long serialVersionUID = -2772900967190704959L;
 
-	@Id
-	public Long id;
+    @Id
+    public Long id;
 
-	@Required
-	public String title;
+    @Required
+    public String title;
 
-	@Required
-	@MinLength(value = 10)
-	@MaxLength(value = 1000)
-	@Column(length = 1000)
-	public String proposal;
+    @Required
+    @MinLength(value = 10)
+    @MaxLength(value = 1000)
+    @Column(length = 1000)
+    public String proposal;
 
-	@Required
-	public SessionType type = SessionType.OneHourTalk;
+    @Required
+    public SessionType type = SessionType.OneHourTalk;
 
-	@Required
-	public Boolean isApproved = false;
+    @Required
+    public Boolean isApproved = false;
 
-	public String keywords;
+    public String keywords;
 
-	@Required
-	@OneToOne(cascade = CascadeType.ALL)
-	public Speaker speaker;
+    @Required
+    @OneToOne(cascade = CascadeType.ALL)
+    public Speaker speaker;
 
-	public void save() {
+    public void save() {
 
-		Ebean.save(this);
-	}
+        Ebean.save(this);
+    }
 
-	public static Finder<Long, Submission> find = new Finder<Long, Submission>(
-			Long.class, Submission.class);
+    public static Finder<Long, Submission> find = new Finder<Long, Submission>(
+            Long.class, Submission.class);
 
-	public static Promise<Submission> randomlyPickSession() {
-		Promise<Submission> promiseOfSubmission = play.libs.Akka
-				.future(new Callable<Submission>() {
-					public Submission call() {
-						// randomly select one if the first
-						Long randomId = (long) (1 + Math.random() * (5 - 1));
-						return Submission.find.byId(randomId);
-					}
-				});
-		return promiseOfSubmission;
-	}
+    public static Promise<Submission> randomlyPickSession() {
+        Promise<Submission> promiseOfSubmission = play.libs.Akka
+                .future(new Callable<Submission>() {
+                    public Submission call() {
+                        // randomly select one if the first
+                        Long randomId = (long) (1 + Math.random() * (5 - 1));
+                        return Submission.find.byId(randomId);
+                    }
+                });
+        return promiseOfSubmission;
+    }
 
-	public static Submission findKeynote() {
-	  return find.where().eq("type", SessionType.Keynote).findUnique();
-	}
+    public static Promise<Submission> findKeynote() {
+        return play.libs.Akka.future(new Callable<Submission>() {
+            @Override
+            public Submission call() throws Exception {
+                return find.where().eq("type", SessionType.Keynote).findUnique();
+            }
+        });
+    }
 }

@@ -9,4 +9,4 @@ resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositori
 addSbtPlugin("com.cloudbees.deploy.play" % "sbt-cloudbees-play-plugin" % "0.5-SNAPSHOT")
 
 // Use the Play sbt plugin for Play projects
-addSbtPlugin("play" % "sbt-plugin" % "2.1.2")
+addSbtPlugin("play" % "sbt-plugin" % "2.1.4-RC1")

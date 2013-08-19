@@ -6,20 +6,20 @@ import play.mvc.WebSocket;
 import play.mvc.WebSocket.Out;
 
 public class NewConnectionEvent {
-	
-	private String uuid;
-	private Out<JsonNode> out;
 
-	public NewConnectionEvent(String uuid, WebSocket.Out<JsonNode> out) {
-		this.uuid = uuid;
-		this.out = out;
-	}
+    private String uuid;
+    private Out<JsonNode> out;
 
-	public String uuid() {
-		return uuid;
-	}
-	
-	public Out<JsonNode> out() {
-		return out;
-	}
+    public NewConnectionEvent(String uuid, WebSocket.Out<JsonNode> out) {
+        this.uuid = uuid;
+        this.out = out;
+    }
+
+    public String uuid() {
+        return uuid;
+    }
+
+    public Out<JsonNode> out() {
+        return out;
+    }
 }

@@ -7,9 +7,8 @@ import play.libs.F.Tuple;
 import play.libs.OAuth.RequestToken;
 
 public interface OAuthService {
-	public Tuple<String, RequestToken> retriveRequestToken(
-			String callback);
+    public Tuple<String, RequestToken> retreiveRequestToken(String callback);
 
-	public Promise<JsonNode> registeredUserProfile(RequestToken token,
-			String authVerifier);
+    public Promise<JsonNode> registeredUserProfile(RequestToken token,
+            String authVerifier);
 }
