@@ -70,7 +70,6 @@ public class Application extends Controller {
 
     public WebSocket<JsonNode> messageBoard(final String uuid) {
         return new WebSocket<JsonNode>() {
-            // Called when the Websocket Handshake is done.
             public void onReady(WebSocket.In<JsonNode> in,
                     WebSocket.Out<JsonNode> out) {
                 publisher.tell(new NewConnectionEvent(uuid, out), null);

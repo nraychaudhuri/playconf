@@ -12,7 +12,12 @@ import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import play.libs.Akka;
 import play.libs.F.Promise;
+import scala.concurrent.ExecutionContext;
+import scala.concurrent.Future;
+
+import akka.dispatch.ExecutionContexts;
 
 import com.avaje.ebean.Ebean;
 
@@ -53,24 +58,26 @@ public class Submission extends Model {
     public static Finder<Long, Submission> find = new Finder<Long, Submission>(
             Long.class, Submission.class);
 
+    private static ExecutionContext ctx = Akka.system().dispatchers().lookup("akka.db-dispatcher");
+
     public static Promise<Submission> randomlyPickSession() {
-        Promise<Submission> promiseOfSubmission = play.libs.Akka
-                .future(new Callable<Submission>() {
-                    public Submission call() {
-                        // randomly select one if the first
-                        Long randomId = (long) (1 + Math.random() * (5 - 1));
-                        return Submission.find.byId(randomId);
-                    }
-                });
-        return promiseOfSubmission;
+        Future<Submission> f = akka.dispatch.Futures.future(new Callable<Submission>() {
+            public Submission call() {
+                // randomly select one if the first
+                Long randomId = (long) (1 + Math.random() * (5 - 1));
+                return Submission.find.byId(randomId);
+            }
+        }, ctx);
+        return Akka.asPromise(f);
     }
 
     public static Promise<Submission> findKeynote() {
-        return play.libs.Akka.future(new Callable<Submission>() {
-            @Override
-            public Submission call() throws Exception {
+        Future<Submission> f = akka.dispatch.Futures.future(new Callable<Submission>() {
+            public Submission call() {
                 return find.where().eq("type", SessionType.Keynote).findUnique();
             }
-        });
+        }, ctx);
+
+        return Akka.asPromise(f);
     }
 }
