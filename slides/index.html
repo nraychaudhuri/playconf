@@ -214,6 +214,7 @@
 				<section>
 					<section>
 				      <h2>Recap</h2>
+				      <br/>
 				      <ol>
 						<li class="fragment">Play Framework is a high velocity web framework</li>
 						<li class="fragment">You can use both Scala or Java API</li>
@@ -358,6 +359,7 @@ target/start
 				<section>
 					<section>
 				      <h2>Recap</h2>
+				      <br/>
 				      <ol>
 						<li class="fragment">Persisting data using EBean</li>
 						<li class="fragment">Working with Play form helpers</li>
@@ -467,6 +469,104 @@ public class GlobalSettings {
                       We will make our application Reactive. Don't miss it
 					</p>
 				</section>
+				<section data-background="#92D13D">
+					<h2>Going Reactive</h2>
+					<br/>
+					<h3>Lesson 4</h3>
+					<img src="assets/play-logo@2x.png" width="300" alt="play logo"/>
+					<p>
+						<small>Created by <a href="http://www.typesafe.com">Typesafe Inc.</a> / <a href="http://twitter.com/typesafe">@typesafe</a></small>
+					</p>
+				</section>
+				<section>
+			      <h2>Recap</h2>
+			      <br/>
+			      <ol>
+					<li class="fragment">Managed vs. Unmanaged Assets</li>
+					<li class="fragment">Play's asset pipeline</li>
+					<li class="fragment">Global Settings</li>
+				  </ol>
+				</section>
+				<section>
+				  <section data-background="#7BDCF5">
+			        <h2>Reactive apps</h2>
+			        </br>
+				    <img width="800" src="assets/full-reactive.png" alt="Reactive app">
+				    <p>
+					  <small>Further information can be found on <a href="http://www.reactivemanifesto.org/">The reactive manifesto</a> website</small>
+				    </p>
+				  </section>
+				  <section>
+				  	<h2>Reactive Architecture properties</h2>
+				  	<br/>
+				    <ol>
+					  <li class="fragment">Event driven programming model</li>
+					  <li class="fragment">Non-blocking over blocking</li>
+					  <li class="fragment">failure zones</li>
+					  <li class="fragment">Push over pull</li>
+					</ol>
+				  </section>
+				</section>
+				<section>
+				  <section data-background="#92D13D">
+			        <h2>Building blocks for Reactive apps</h2>
+			        </br>
+				    <img width="400" src="assets/building-blocks.png" alt="building blocks">
+				  </section>
+				  <section>
+				  	<h2>Event driven</h2>
+				  </section>					  	
+				  <section>
+				  	<h2>Actor programming model</h2>
+		      	    <img src="assets/actor.png" width="700" alt="actor"/>
+				  </section>
+				  <section>
+				  	 <h2>Scalable</h2>
+				  </section>	
+				  <section>
+				  	<h2>Problem</h2>
+		      	    <img src="assets/synchronous.png" width="700" alt="blocking operations"/>
+				  </section>	
+				  <section>
+				  	<h2>Making it non-blocking</h2>
+		      	    <img src="assets/async.png" width="650" alt="non-blocking operations"/>
+		      	    <p>Using future for asynchronous operations</p>
+				  </section>
+				  <section>
+				  	 <h2>Resilient</h2>
+				  </section>	
+				  <section>
+				  	<h2>An example flow</h2>
+		      	    <img src="assets/failure-zone1.png" width="700" alt="failure zone1"/>
+				  </section>	
+				  <section>
+				  	<h2>Problem</h2>
+		      	    <img src="assets/failure-zone2.png" width="700" alt="failure zone2"/>
+				  </section>	
+				  <section>
+				  	<h2>Using separate pool</h2>
+		      	    <img src="assets/failure-zone3.png" width="700" alt="failure zone3"/>
+				  </section>	
+				  <section>
+				  	<h2>failure is isolated</h2>
+		      	    <img src="assets/failure-zone4.png" width="700" alt="failure zone4"/>
+				  </section>
+				  <section>
+				  	<h2>Interactive</h2>
+				  </section>
+				  <section>
+				  	<h2>Push channel</h2>
+		      	    <img src="assets/push-channel.png" width="700" alt="push channel"/>
+				  </section>	
+				</section>	
+				<section data-background="#7BDCF5">
+			  	   <h2>Going reactive</h2>
+		      	   <img src="assets/submission-push-channel.png" width="700" alt="websocket"/>
+				</section>
+				<section>
+					<h2>Next lesson</h2>
+					<p>Next lesson we integrate with external webservice and implement the registration process</p>
+				</section>	
 				<section>
 					<h1>THE END</h1>
 					<h3>BY Typesafe / typesafe.com</h3>
