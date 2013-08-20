@@ -8,6 +8,11 @@
 	@defining(java.util.UUID.randomUUID.toString) { uuid =>		
 	   <input  type="hidden" id="ws-url" value="@routes.Application.messageBoard(uuid).webSocketURL(request)"/>
     }
+    @if(flash().containsKey("message")) {
+        <section>
+            <h4 style="color: rgb(124, 178, 50);">@flash.get("message")</h4>
+        </section>
+    }
     <section id="speakers" class="clear">
       <header>
         <h1>Speakers</h1>

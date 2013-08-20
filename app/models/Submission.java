@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.validation.Valid;
 
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
@@ -16,8 +17,6 @@ import play.libs.Akka;
 import play.libs.F.Promise;
 import scala.concurrent.ExecutionContext;
 import scala.concurrent.Future;
-
-import akka.dispatch.ExecutionContexts;
 
 import com.avaje.ebean.Ebean;
 
@@ -46,7 +45,7 @@ public class Submission extends Model {
 
     public String keywords;
 
-    @Required
+    @Valid
     @OneToOne(cascade = CascadeType.ALL)
     public Speaker speaker;
 

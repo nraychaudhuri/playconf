@@ -9,6 +9,7 @@ import javax.persistence.OneToMany;
 
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.MaxLength;
+import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
@@ -26,6 +27,7 @@ public class Speaker extends Model {
     public String email;
 
     @Required
+    @MinLength(value = 10)
     @MaxLength(value = 1000)
     @Column(length = 1000)
     public String bio;

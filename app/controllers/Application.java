@@ -44,8 +44,8 @@ public class Application extends Controller {
     private static Form<Submission> form = Form.form(Submission.class);
 
     public Result register() {
-        Tuple<String, RequestToken> t = oauth.retreiveRequestToken("http://"
-                + request().host() + "/register_callback");
+        String redirectURL = routes.Application.registerCallback().absoluteURL(request());
+        Tuple<String, RequestToken> t = oauth.retreiveRequestToken(redirectURL);
         flash("request_token", t._2.token);
         flash("request_secret", t._2.secret);
         return redirect(t._1);
@@ -102,7 +102,7 @@ public class Application extends Controller {
         for (RegisteredUser ru : users) {
             publisher.tell(new UserRegistrationEvent(ru), null);
         }
-        return ok("Done");
+        return ok();
     }
 
     public Result submitProposal() {
@@ -113,6 +113,7 @@ public class Application extends Controller {
             Submission s = filledForm.get();
             s.save();
             publisher.tell(new NewSubmissionEvent(s), null);
+            flash("message", "Thanks for submitting the proposal. We will get back to you soon.");
             return redirect(routes.Application.index());
         }
     }
