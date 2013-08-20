@@ -212,16 +212,14 @@
 					</p>
 				</section>
 				<section>
-					<section>
-				      <h2>Recap</h2>
-				      <br/>
-				      <ol>
-						<li class="fragment">Play Framework is a high velocity web framework</li>
-						<li class="fragment">You can use both Scala or Java API</li>
-						<li class="fragment">Improves developer productivity</li>
-						<li class="fragment">Makes it simple to build Reactive Web Apps</li>
-					  </ol>
-					</section>
+			      <h2>Recap</h2>
+			      <br/>
+			      <ol>
+					<li class="fragment">Play Framework is a high velocity web framework</li>
+					<li class="fragment">You can use both Scala or Java API</li>
+					<li class="fragment">Improves developer productivity</li>
+					<li class="fragment">Makes it simple to build Reactive Web Apps</li>
+				  </ol>
 				</section>
 				<section>
 			      <h2>PlayConf app</h2>
@@ -567,6 +565,83 @@ public class GlobalSettings {
 					<h2>Next lesson</h2>
 					<p>Next lesson we integrate with external webservice and implement the registration process</p>
 				</section>	
+				<section data-background="#92D13D">
+				    <h2>Using REST services</h2>
+					<br/>
+					<h3>Lesson 5</h3>
+					<img src="assets/play-logo@2x.png" width="300" alt="play logo"/>
+					<p>
+						<small>Created by <a href="http://www.typesafe.com">Typesafe Inc.</a> / <a href="http://twitter.com/typesafe">@typesafe</a></small>
+					</p>
+				</section>
+				<section>
+			      <h2>Recap</h2>
+			      <br/>
+			      <ol>
+					<li class="fragment">Core principles of Reactive applications</li>
+					<li class="fragment">Actors programming model</li>
+					<li class="fragment">Asynchronous operations using Future</li>
+					<li class="fragment">WebSocket</li>
+				  </ol>
+				</section>
+				<section>
+			      <h2>PlayConf app</h2>
+			      <br/>
+				  <img src="assets/playconf.png" width="700" alt="playconf home page"/>
+                </section>
+                <section>
+                  <section data-background="#7BDCF5">
+                  	<h2>Invoking REST services</h2>
+                  </section>
+                  <section>
+                  	<h2>The Play WS client</h2>
+                  	<p>Play library to call other HTTP services from within the play application</p>
+                  	<br/>
+                  	<ol>
+                  	  <li>Making REST call	
+					<pre><code>
+//invoking HTTP GET
+Promise&lt;WS.Response&gt; homePage = WS.url("http://mysite.com").get();
+//invoking HTTP POST
+Promise&lt;WS.Response&gt; result = WS.url("http://localhost:9001").post("content");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+	   			    </code></pre>
+	   			      </li>
+	   			      <li>Retrieving HTTP response
+					<pre><code>
+WS.url(feedUrl).get().map(
+  new Function&lt;WS.Response, Result&gt;() {
+    public Result apply(WS.Response response) {
+      return ok("Feed title:" + response.asJson().findPath("title"));
+    }
+  }
+);
+
+	   			    </code></pre>
+	   			      </li>
+                    </ol> 
+                  </section>	
+                </section>	
+                <section>
+	                <section>
+				  	   <h2>Using OAuth</h2>
+			      	   <img src="assets/oauth.png" width="500" alt="oauth logo"/>
+					</section>
+					<section>
+					   <h2>Registration flow</h2>	
+			      	   <img src="assets/twitter-oauth-steps.png" width="850" alt="twitter oauth steps"/>
+					</section>	
+                </section>
+                <section data-background="#7BDCF5">
+                  <h2>Implement the registration steps</h2>
+		      	  <img src="assets/registration-flow-push-channel.png" width="800" alt="registration steps"/>
+                </section>	
+                <section>
+				   <h2>Next lesson</h2>
+				   <p>
+                     We add tests to our application.
+				   </p>
+				</section>
 				<section>
 					<h1>THE END</h1>
 					<h3>BY Typesafe / typesafe.com</h3>
