@@ -18,8 +18,6 @@ import play.libs.F.Promise;
 import scala.concurrent.ExecutionContext;
 import scala.concurrent.Future;
 
-import com.avaje.ebean.Ebean;
-
 @Entity
 public class Submission extends Model {
 
@@ -48,11 +46,6 @@ public class Submission extends Model {
     @Valid
     @OneToOne(cascade = CascadeType.ALL)
     public Speaker speaker;
-
-    public void save() {
-
-        Ebean.save(this);
-    }
 
     public static Finder<Long, Submission> find = new Finder<Long, Submission>(
             Long.class, Submission.class);
