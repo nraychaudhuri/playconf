@@ -20,7 +20,8 @@ showProposal = (json) ->
   $("#twitterId").html json.twitterId
   $("#title").html json.title
   $("#proposal").html json.proposal
-$(document).ready ->
+  
+connectWebSocket = () ->
   websocket = new WebSocket $("#ws-url").val()
   websocket.onmessage = (evt) ->
     json = JSON.parse(evt.data)
@@ -35,3 +36,8 @@ $(document).ready ->
 
   websocket.onerror = (evt) ->
     alert "error " + evt
+          
+$(document).ready ->
+    if(typeof(WebSocket) == "function")
+      connectWebSocket()
+

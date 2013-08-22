@@ -33,6 +33,7 @@ public class IndexViewTest {
                 s.speaker = speaker;
                 Html html = views.html.index.render(s);
                 assertThat(contentType(html)).isEqualTo("text/html");
+                //parsing html so that we can jquery type selector to test each element
                 Document doc = Jsoup.parse(contentAsString(html));
                 assertThat(doc.select("#title").text()).isEqualTo("Keynote - " + s.title);
                 assertThat(doc.select("#speakerName").text()).isEqualTo(speaker.name);

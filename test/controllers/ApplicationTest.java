@@ -3,14 +3,12 @@ package controllers;
 import static helpers.TestSetup.testHttpContext;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
-import static play.test.Helpers.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static play.test.Helpers.redirectLocation;
+import static play.test.Helpers.status;
 
-import org.apache.http.impl.client.RedirectLocations;
 import org.codehaus.jackson.JsonNode;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -31,7 +29,7 @@ public class ApplicationTest {
 
     @Before
     public void setUpHttpContext() {        
-        Context.current.set(testHttpContext());
+       Context.current.set(testHttpContext());
     }
     
     @Test
@@ -58,17 +56,19 @@ public class ApplicationTest {
         ctx.flash().put("request_token", "foo");
         ctx.flash().put("request_secret", "bar");
         
-        ActorRef publisher = mock(ActorRef.class);
         OAuthService oauth = mock(OAuthService.class);
-        JsonNode a = Json.newObject();
+        JsonNode emptyJson = Json.newObject();
         
         ArgumentCaptor<RequestToken> rtArg = ArgumentCaptor.forClass(RequestToken.class);
-        when(oauth.registeredUserProfile(rtArg.capture(), anyString())).thenReturn(Promise.pure(a));        
+        when(oauth.registeredUserProfile(rtArg.capture(), anyString())).thenReturn(Promise.pure(emptyJson));        
         
-        Application app = new Application(publisher, oauth);
+        Application app = new Application(mock(ActorRef.class), oauth);
         Result result = app.registerCallback();
         assertThat(status(result)).isEqualTo(303);
         assertThat(redirectLocation(result)).isEqualTo("/");
+        
+        assertThat(rtArg.getValue().token).isEqualTo("foo");
+        assertThat(rtArg.getValue().secret).isEqualTo("bar");
     }
     
     

@@ -1,6 +1,6 @@
 package models;
 
-import static helpers.TestSetup.testGlobalSettings;
+import static helpers.TestSetup.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.running;
@@ -40,19 +40,5 @@ public class SubmissionTest {
     private int rowCount() {
         return Ebean.find(Submission.class).findRowCount();
     }
-      
-    private Submission sampleSubmission() {
-        Submission s = new Submission();
-        s.title = "Best Java web development experience";
-        s.proposal = "I enjoy web development and Play makes that experience even better";
-        return s;
-    }
 
-    private Speaker sampleSpeaker() {
-        Speaker speaker = new Speaker();
-        speaker.name = "Nilanjan";
-        speaker.bio = "Play core developer";
-        speaker.pictureUrl = "my picture url";
-        return speaker;
-    }
 }

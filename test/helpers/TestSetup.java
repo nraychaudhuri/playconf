@@ -7,6 +7,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import models.Speaker;
+import models.Submission;
+
 import play.Configuration;
 import play.GlobalSettings;
 import play.api.mvc.RequestHeader;
@@ -50,5 +53,21 @@ public class TestSetup {
                 return new Configuration(ConfigFactory.parseMap(dbSettings));
             }
         };
+    }
+    
+    public static Submission sampleSubmission() {
+        final Submission s = new Submission();
+        s.title = "Best Java web development experience";
+        s.proposal = "I enjoy web development and Play makes that experience even better";
+        return s;
+    }
+
+    public static Speaker sampleSpeaker() {
+        final Speaker speaker = new Speaker();
+        speaker.name = "Nilanjan";
+        speaker.bio = "Play core developer";
+        speaker.pictureUrl = "my picture url";
+        speaker.twitterId = "nraychaudhuri";
+        return speaker;
     }
 }

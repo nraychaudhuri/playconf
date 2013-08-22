@@ -2,6 +2,7 @@
 
 @import helper._
 @scripts = {
+  <script src="@routes.Assets.at("javascripts/playconf.js")" type="text/javascript" charset="utf-8"></script>    
 }
 
 @main("PlayConf 2014", scripts) {
@@ -10,7 +11,7 @@
     }
     @if(flash().containsKey("message")) {
         <section>
-            <h4 style="color: rgb(124, 178, 50);">@flash.get("message")</h4>
+            <h4 style="color: rgb(124, 178, 50);" id="message">@flash.get("message")</h4>
         </section>
     }
     <section id="speakers" class="clear">
