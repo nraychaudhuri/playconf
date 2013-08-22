@@ -44,17 +44,22 @@ public class TestSetup {
             public Configuration onLoadConfig(Configuration config, File path,
                     ClassLoader classloader) {
                 //ignore the default configuration
-                Map<String, Object> dbSettings = new HashMap<String, Object>();
-                dbSettings.put("db.testdb.driver", "org.h2.Driver");
-                dbSettings.put("db.testdb.user", "sa");
-                dbSettings.put("db.testdb.url",
-                        "jdbc:h2:mem:playconftest;MODE=MySQL");
-                dbSettings.put("ebean.testdb", "models.*, helpers.*");
-                return new Configuration(ConfigFactory.parseMap(dbSettings));
+                return new Configuration(ConfigFactory.parseMap(testDbSettings()));
             }
+
         };
     }
-    
+
+	public static Map<String, Object> testDbSettings() {
+		Map<String, Object> dbSettings = new HashMap<String, Object>();
+        dbSettings.put("db.testdb.driver", "org.h2.Driver");
+        dbSettings.put("db.testdb.user", "sa");
+        dbSettings.put("db.testdb.url",
+                "jdbc:h2:mem:playconftest;MODE=MySQL");
+        dbSettings.put("ebean.testdb", "models.*, helpers.*");
+		return dbSettings;
+	}
+
     public static Submission sampleSubmission() {
         final Submission s = new Submission();
         s.title = "Best Java web development experience";

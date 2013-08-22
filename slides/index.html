@@ -662,20 +662,74 @@ WS.url(feedUrl).get().map(
 				</section>
 				<section>
 	                <section data-background="#7BDCF5">
+	                  <h2>Dependency Injection in Play</h2>
+	                </section>
+	                <section>
+	                  <h2>Problem</h2>
+			      	  <img src="assets/di-problem.png"width="700" alt="di problem"/>
+	                </section>					
+	                <section>
+	                  <h2>DI</h2>
+			      	  <img src="assets/di-solution.png" width="650" alt="di solution"/>
+			      	  <p>Managed controller classes instantiation</p>
+	                </section>
+				</section>
+				<section data-background="#92D13D">
+				   <h2>Lets integrate with Guice</h2>
+				</section>	
+				<section>
+	                <section data-background="#7BDCF5">
 	                  <h2>Testing support in Play</h2>
 			      	  <img src="assets/testing.png"width="400" alt="testing"/>
-	                </section>		
-	                <section>
-	                   <h2>
-	                <section>							
-	            </section>    
+					</section>
+					<section>
+					  <h2>Test Helpers</h2>	
+					  <ol>
+					  	<li class="fragment">Fakes
+					<pre><code data-trim contenteditable>
+import static play.test.Helpers.*;						
+FakeApplication fake = Helpers.fakeApplication(testGlobalSettings());
+FakeRequest req = Helpers.fakeRequest("GET", "/");
+				    </code></pre>
+	   			    	</li>					  	
+					  	<li class="fragment">Running application
+					<pre><code data-trim contenteditable>
+running(fakeApplication(), new Runnable() {
+	public void run() {
+      //your test code goes in here
+    }
+});
+     	   			 </code></pre>
+					  	</li>
+					  	<li class="fragment">Routing to action
+					<pre><code data-trim contenteditable>
+Result response = route(fakeRequest("GET", "/"))
+     	   			 </code></pre>
+					  	</li>
+					  	<li class="fragment">Running Test server
+					<pre><code data-trim contenteditable>
+running(testServer(3333), HTMLUNIT, new Callback&lt;TestBrowser&gt;() {
+   public void invoke(TestBrowser browser) { /*test from browser */ }
+});
+     	   			 </code></pre>
+					  	</li>	
+					</section>
+					<section>
+					  <h2>Testing tools</h2>
+					  <p>Play by default comes with JUnit</p>
+					  <br/>
+                      <p class="fragment">We will use JUnit with Mockito for mocking and JSoup for testing DOM elements</p>
+					</section>	
+	            </section> 
+	            <section>
+				   <h2>Lets add test</h2>
+				   <img src="assets/playconf-app-flow.png"width="800" alt="playconf app flow"/>
+				</section>	   
 				<section>
 					<h1>THE END</h1>
 					<h3>BY Typesafe / typesafe.com</h3>
 				</section>
-
 			</div>
-
 		</div>
 
 		<script src="lib/js/head.min.js"></script>
