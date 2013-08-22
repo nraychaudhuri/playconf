@@ -53,7 +53,7 @@ public class Application extends Controller {
 
     public Result registerCallback() {
         RequestToken token = new RequestToken(flash("request_token"),
-                flash("request_secret"));
+                flash("request_secret"));        
         String authVerifier = request().getQueryString("oauth_verifier");
         Promise<JsonNode> userProfile = oauth.registeredUserProfile(token,
                 authVerifier);

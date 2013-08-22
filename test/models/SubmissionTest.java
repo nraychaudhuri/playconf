@@ -1,6 +1,6 @@
 package models;
 
-import static helpers.TestGlobalSettings.testSettings;
+import static helpers.TestSetup.testGlobalSettings;
 import static org.fest.assertions.Assertions.assertThat;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.running;
@@ -12,7 +12,7 @@ import com.avaje.ebean.Ebean;
 public class SubmissionTest {
     @Test
     public void saveNewSubmission() {
-        running(fakeApplication(testSettings), new Runnable() {
+        running(fakeApplication(testGlobalSettings()), new Runnable() {
             @Override
             public void run() {
                 Submission s = sampleSubmission();
@@ -24,7 +24,7 @@ public class SubmissionTest {
 
     @Test
     public void savingSubmissionAlsoSavesSpeaker() {
-        running(fakeApplication(testSettings), new Runnable() {
+        running(fakeApplication(testGlobalSettings()), new Runnable() {
             @Override
             public void run() {
                 Submission s = sampleSubmission();

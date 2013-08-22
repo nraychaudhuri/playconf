@@ -16,7 +16,8 @@ object ApplicationBuild extends Build {
     "mysql" % "mysql-connector-java" % "5.1.26",
     "com.google.inject" % "guice" % "3.0",
     "javax.inject" % "javax.inject" % "1",
-    "org.mockito" % "mockito-core" % "1.9.5" % "test"
+    "org.mockito" % "mockito-core" % "1.9.5" % "test",
+    "org.jsoup" % "jsoup" % "1.7.2" % "test"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(

@@ -1,23 +1,76 @@
 package controllers;
 
-import static play.test.Helpers.fakeApplication;
-import static play.test.Helpers.running;
+import static helpers.TestSetup.testHttpContext;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
+import static play.test.Helpers.*;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
+import org.apache.http.impl.client.RedirectLocations;
+import org.codehaus.jackson.JsonNode;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
-import com.avaje.ebean.Ebean;
-import com.typesafe.config.ConfigFactory;
-
-import play.Configuration;
-import play.GlobalSettings;
-import static org.fest.assertions.Assertions.*;
-import static helpers.TestGlobalSettings.*;
+import play.libs.F;
+import play.libs.F.Promise;
+import play.libs.F.Tuple;
+import play.libs.Json;
+import play.libs.OAuth.RequestToken;
+import play.mvc.Http.Context;
+import play.mvc.Http.Flash;
+import play.mvc.Http.Status;
+import play.mvc.Result;
+import akka.actor.ActorRef;
+import external.services.OAuthService;
 
 public class ApplicationTest {
 
-    //test twitter register and callback with guice
+    @Before
+    public void setUpHttpContext() {        
+        Context.current.set(testHttpContext());
+    }
+    
+    @Test
+    public void redirectToOAuthProviderForRegister() {
+        OAuthService oauth = mock(OAuthService.class);
+        Tuple<String, RequestToken> t = new F.Tuple<String, RequestToken>(
+                "twitter.redirect.url", new RequestToken("twitter.token", "twitter.secret"));
+        when(oauth.retreiveRequestToken(anyString())).thenReturn(t);
+
+        Application app = new Application(mock(ActorRef.class), oauth);
+        Result result = app.register();
+        assertThat(status(result)).isEqualTo(Status.SEE_OTHER);
+        assertThat(redirectLocation(result)).isEqualTo("twitter.redirect.url");
+        
+        Flash flash = Context.current().flash();
+        assertThat(flash.get("request_token")).isEqualTo("twitter.token");
+        assertThat(flash.get("request_secret")).isEqualTo("twitter.secret");
+        
+    }
+    
+    @Test
+    public void registerUser() {
+        Context ctx = Context.current();
+        ctx.flash().put("request_token", "foo");
+        ctx.flash().put("request_secret", "bar");
+        
+        ActorRef publisher = mock(ActorRef.class);
+        OAuthService oauth = mock(OAuthService.class);
+        JsonNode a = Json.newObject();
+        
+        ArgumentCaptor<RequestToken> rtArg = ArgumentCaptor.forClass(RequestToken.class);
+        when(oauth.registeredUserProfile(rtArg.capture(), anyString())).thenReturn(Promise.pure(a));        
+        
+        Application app = new Application(publisher, oauth);
+        Result result = app.registerCallback();
+        assertThat(status(result)).isEqualTo(303);
+        assertThat(redirectLocation(result)).isEqualTo("/");
+    }
+    
+    
+    
 }
