@@ -1,37 +1,15 @@
 package models;
 
+import static helpers.TestGlobalSettings.testSettings;
+import static org.fest.assertions.Assertions.assertThat;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.running;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.Test;
 
 import com.avaje.ebean.Ebean;
-import com.typesafe.config.ConfigFactory;
-
-import play.Configuration;
-import play.GlobalSettings;
-import static org.fest.assertions.Assertions.*;
 
 public class SubmissionTest {
-
-    private GlobalSettings testSettings = new GlobalSettings() {
-        @Override
-        public Configuration onLoadConfig(Configuration config, File path,
-                ClassLoader classloader) {
-            Map<String, Object> dbSettings = new HashMap<String, Object>();
-            dbSettings.put("db.testdb.driver", "org.h2.Driver");
-            dbSettings.put("db.testdb.user", "sa");
-            dbSettings.put("db.testdb.url",
-                    "jdbc:h2:mem:playconftest;MODE=MySQL");
-            dbSettings.put("ebean.testdb", "models.*, helpers.*");
-            return new Configuration(ConfigFactory.parseMap(dbSettings));
-        }
-    };
-
     @Test
     public void saveNewSubmission() {
         running(fakeApplication(testSettings), new Runnable() {
