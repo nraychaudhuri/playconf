@@ -4,7 +4,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static play.test.Helpers.*;
 import static helpers.TestSetup.*;
 import models.Speaker;
-import models.Submission;
+import models.Proposal;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -27,7 +27,7 @@ public class IndexViewTest {
                 speaker.twitterId = "nraychaudhuri";
                 speaker.pictureUrl = "picture url";
 
-                Submission s = new Submission();
+                Proposal s = new Proposal();
                 s.title = "No Work just Play";
                 s.proposal = "This is the description";
                 s.speaker = speaker;

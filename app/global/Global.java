@@ -2,7 +2,7 @@ package global;
 
 import java.util.concurrent.TimeUnit;
 
-import models.Submission;
+import models.Proposal;
 import play.Application;
 import play.GlobalSettings;
 import play.Play;
@@ -65,11 +65,11 @@ public class Global extends GlobalSettings {
     private Runnable selectRandomTalk() {
         return new Runnable() {
             public void run() {
-                Promise<Submission> promiseOfJson = Submission
+                Promise<Proposal> promiseOfJson = Proposal
                         .randomlyPickSession();
-                promiseOfJson.onRedeem(new Callback<Submission>() {
+                promiseOfJson.onRedeem(new Callback<Proposal>() {
                     @Override
-                    public void invoke(Submission s) throws Throwable {
+                    public void invoke(Proposal s) throws Throwable {
                         EventPublisher.publisher.tell(
                                 new RandomlySelectTalkEvent(s), null);
                     }

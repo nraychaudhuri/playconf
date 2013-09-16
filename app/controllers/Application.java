@@ -6,7 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import models.RegisteredUser;
-import models.Submission;
+import models.Proposal;
 
 import org.codehaus.jackson.JsonNode;
 
@@ -41,7 +41,7 @@ public class Application extends Controller {
         this.oauth = oauth;
     }
 
-    private static Form<Submission> form = Form.form(Submission.class);
+    private static Form<Proposal> form = Form.form(Proposal.class);
 
     public Result register() {
         String redirectURL = routes.Application.registerCallback().absoluteURL(request());
@@ -68,11 +68,12 @@ public class Application extends Controller {
         return redirect(routes.Application.index());
     }
 
-    public WebSocket<JsonNode> messageBoard(final String uuid) {
+    public WebSocket<JsonNode> buzz() {
         return new WebSocket<JsonNode>() {
             public void onReady(WebSocket.In<JsonNode> in,
                     WebSocket.Out<JsonNode> out) {
-                publisher.tell(new NewConnectionEvent(uuid, out), null);
+                final String uuid = java.util.UUID.randomUUID().toString();
+                publisher.tell(new NewConnectionEvent(uuid , out), null);
                 in.onClose(new Callback0() {
                     @Override
                     public void invoke() throws Throwable {
@@ -84,9 +85,9 @@ public class Application extends Controller {
     }
 
     public Result index() {
-        Promise<Result> p = Submission.findKeynote().map(new Function<Submission, Result>() {
+        Promise<Result> p = Proposal.findKeynote().map(new Function<Proposal, Result>() {
             @Override
-            public Result apply(Submission s) throws Throwable {
+            public Result apply(Proposal s) throws Throwable {
                 return ok(index.render(s));
             }
         });
@@ -98,23 +99,31 @@ public class Application extends Controller {
     }
 
     public Result recentUsers(int count) {
-        List<RegisteredUser> users = RegisteredUser.recentUsers(count);
-        for (RegisteredUser ru : users) {
-            publisher.tell(new UserRegistrationEvent(ru), null);
-        }
+        RegisteredUser.recentUsers(count).onRedeem(new Callback<List<RegisteredUser>>() {
+            @Override
+            public void invoke(List<RegisteredUser> users) throws Throwable {
+                for (RegisteredUser ru : users) {
+                    publisher.tell(new UserRegistrationEvent(ru), null);
+                }
+            }
+        });
         return ok();
     }
 
     public Result submitProposal() {
-        Form<Submission> filledForm = form.bindFromRequest();
+        Form<Proposal> filledForm = form.bindFromRequest();
         if (filledForm.hasErrors()) {
             return badRequest(newProposal.render(filledForm));
         } else {
-            Submission s = filledForm.get();
-            s.save();
-            publisher.tell(new NewSubmissionEvent(s), null);
-            flash("message", "Thanks for submitting the proposal. We will get back to you soon.");
-            return redirect(routes.Application.index());
+            final Proposal s = filledForm.get();
+            Promise<Result> r = s.asyncSave().map(new Function<Void, Result>(){
+                public Result apply(Void a) {
+                    publisher.tell(new NewSubmissionEvent(s), null);
+                    flash("message", "Thanks for submitting the proposal. We will get back to you soon.");
+                    return redirect(routes.Application.index());                    
+                }
+            });
+            return async(r);
         }
     }
 }

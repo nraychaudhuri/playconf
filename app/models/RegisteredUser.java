@@ -1,18 +1,24 @@
 package models;
 
+import static akka.dispatch.Futures.future;
+
 import java.sql.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import org.codehaus.jackson.JsonNode;
 
-import com.avaje.ebean.PagingList;
-
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import play.libs.Akka;
+import play.libs.F.Promise;
+import scala.concurrent.Future;
+
+import com.avaje.ebean.PagingList;
 
 @Entity
 public class RegisteredUser extends Model {
@@ -48,10 +54,16 @@ public class RegisteredUser extends Model {
         return u;
     }
 
-    public static List<RegisteredUser> recentUsers(int count) {
-        PagingList<RegisteredUser> xs = find.order().desc("registrationDate")
-                .findPagingList(count);
-        return xs.getAsList();
+    public static Promise<List<RegisteredUser>> recentUsers(final int count) {
+        Future<List<RegisteredUser>> f = future(new Callable<List<RegisteredUser>>() {
+            @Override
+            public List<RegisteredUser> call() throws Exception {
+                PagingList<RegisteredUser> xs = find.order().desc("registrationDate")
+                        .findPagingList(count);
+                return xs.getAsList();
+            }
+        }, DbExecutionContext.ctx);
+        return Akka.asPromise(f);
     }
 
 }

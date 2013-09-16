@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import models.Speaker;
-import models.Submission;
+import models.Proposal;
 
 import play.Configuration;
 import play.GlobalSettings;
@@ -60,8 +60,8 @@ public class TestSetup {
 		return dbSettings;
 	}
 
-    public static Submission sampleSubmission() {
-        final Submission s = new Submission();
+    public static Proposal sampleSubmission() {
+        final Proposal s = new Proposal();
         s.title = "Best Java web development experience";
         s.proposal = "I enjoy web development and Play makes that experience even better";
         return s;

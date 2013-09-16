@@ -3,6 +3,18 @@
 
 # --- !Ups
 
+create table proposal (
+  id                        bigint not null,
+  title                     varchar(255),
+  proposal                  varchar(1000),
+  type                      integer,
+  is_approved               boolean,
+  keywords                  varchar(255),
+  speaker_id                bigint,
+  constraint ck_proposal_type check (type in (0,1)),
+  constraint pk_proposal primary key (id))
+;
+
 create table registered_user (
   id                        bigint not null,
   name                      varchar(255),
@@ -23,26 +35,14 @@ create table speaker (
   constraint pk_speaker primary key (id))
 ;
 
-create table submission (
-  id                        bigint not null,
-  title                     varchar(255),
-  proposal                  varchar(1000),
-  type                      integer,
-  is_approved               boolean,
-  keywords                  varchar(255),
-  speaker_id                bigint,
-  constraint ck_submission_type check (type in (0,1)),
-  constraint pk_submission primary key (id))
-;
+create sequence proposal_seq;
 
 create sequence registered_user_seq;
 
 create sequence speaker_seq;
 
-create sequence submission_seq;
-
-alter table submission add constraint fk_submission_speaker_1 foreign key (speaker_id) references speaker (id) on delete restrict on update restrict;
-create index ix_submission_speaker_1 on submission (speaker_id);
+alter table proposal add constraint fk_proposal_speaker_1 foreign key (speaker_id) references speaker (id) on delete restrict on update restrict;
+create index ix_proposal_speaker_1 on proposal (speaker_id);
 
 
 
@@ -50,17 +50,17 @@ create index ix_submission_speaker_1 on submission (speaker_id);
 
 SET REFERENTIAL_INTEGRITY FALSE;
 
+drop table if exists proposal;
+
 drop table if exists registered_user;
 
 drop table if exists speaker;
 
-drop table if exists submission;
-
 SET REFERENTIAL_INTEGRITY TRUE;
+
+drop sequence if exists proposal_seq;
 
 drop sequence if exists registered_user_seq;
 
 drop sequence if exists speaker_seq;
-
-drop sequence if exists submission_seq;
 

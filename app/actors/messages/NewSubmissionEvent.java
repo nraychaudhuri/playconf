@@ -5,13 +5,13 @@ import org.codehaus.jackson.node.ObjectNode;
 
 import play.libs.Json;
 
-import models.Submission;
+import models.Proposal;
 
 public class NewSubmissionEvent implements UserEvent {
 
-    private final Submission submission;
+    private final Proposal submission;
 
-    public NewSubmissionEvent(Submission s) {
+    public NewSubmissionEvent(Proposal s) {
         submission = s;
     }
 

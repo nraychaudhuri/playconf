@@ -15,7 +15,7 @@ public class SubmissionTest {
         running(fakeApplication(testGlobalSettings()), new Runnable() {
             @Override
             public void run() {
-                Submission s = sampleSubmission();
+                Proposal s = sampleSubmission();
                 s.save();
                 assertThat(rowCount()).isEqualTo(1);
             }
@@ -27,7 +27,7 @@ public class SubmissionTest {
         running(fakeApplication(testGlobalSettings()), new Runnable() {
             @Override
             public void run() {
-                Submission s = sampleSubmission();
+                Proposal s = sampleSubmission();
                 s.speaker = sampleSpeaker();
                 s.save();
                 assertThat(rowCount()).isEqualTo(1);
@@ -38,7 +38,7 @@ public class SubmissionTest {
     }
 
     private int rowCount() {
-        return Ebean.find(Submission.class).findRowCount();
+        return Ebean.find(Proposal.class).findRowCount();
     }
 
 }

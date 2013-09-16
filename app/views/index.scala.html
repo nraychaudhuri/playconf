@@ -1,4 +1,4 @@
-@(keynote: models.Submission)
+@(keynote: models.Proposal)
 
 @import helper._
 @scripts = {
@@ -6,9 +6,7 @@
 }
 
 @main("PlayConf 2014", scripts) {
-	@defining(java.util.UUID.randomUUID.toString) { uuid =>		
-	   <input  type="hidden" id="ws-url" value="@routes.Application.messageBoard(uuid).webSocketURL(request)"/>
-    }
+	<input  type="hidden" id="ws-url" value="@routes.Application.buzz().webSocketURL(request)"/>
     @if(flash().containsKey("message")) {
         <section>
             <h4 style="color: rgb(124, 178, 50);" id="message">@flash.get("message")</h4>

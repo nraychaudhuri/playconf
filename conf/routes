@@ -5,9 +5,9 @@
 # Home page
 GET    /               @controllers.Application.index()
 
-GET    /pushChannel/:uuid  @controllers.Application.messageBoard(uuid)
+GET    /buzz 		   @controllers.Application.buzz()
 
-GET    /register       @controllers.Application.register()
+GET    /register            @controllers.Application.register()
 
 POST   /recentUsers/:count   @controllers.Application.recentUsers(count: Int)
 
