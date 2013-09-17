@@ -13,6 +13,7 @@ import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.actor.UntypedActorFactory;
 import akka.dispatch.Foreach;
+import scala.Option;
 
 public class EventPublisher extends UntypedActor {
 
@@ -29,7 +30,11 @@ public class EventPublisher extends UntypedActor {
         if (message instanceof CloseConnectionEvent) {
             final CloseConnectionEvent cce = (CloseConnectionEvent) message;
             final String uuid = cce.uuid();
-            context().child("user" + uuid).foreach(stopChild(uuid));
+            Option<ActorRef> child = getContext().child("user" + uuid);
+            if(child.isDefined()) {
+                getContext().stop(child.get());
+                Logger.info("Browser " + uuid + "is disconnected");
+            }
         }
         if (message instanceof UserEvent) {
             broadcastEvent((UserEvent) message);
@@ -38,19 +43,9 @@ public class EventPublisher extends UntypedActor {
         }
     }
 
-    private Foreach<ActorRef> stopChild(final String uuid) {
-        return new akka.dispatch.Foreach<ActorRef>() {
-            @Override
-            public void each(ActorRef ref) throws Throwable {
-                context().stop(ref);
-                Logger.info("Browser " + uuid + "is disconnected");
-            }
-        };
-    }
-
     private ActorRef createUserActor(String uuid, final Out<JsonNode> out) {
         @SuppressWarnings("serial")
-        ActorRef userActor = context().actorOf(
+        ActorRef userActor = getContext().actorOf(
                 new Props(new UntypedActorFactory() {
                     public UntypedActor create() {
                         return new UserActor(out);
@@ -61,7 +56,7 @@ public class EventPublisher extends UntypedActor {
     }
 
     private void broadcastEvent(final UserEvent ure) {
-        context().children().foreach(new akka.dispatch.Foreach<ActorRef>() {
+        getContext().children().foreach(new akka.dispatch.Foreach<ActorRef>() {
             @Override
             public void each(ActorRef ref) throws Throwable {
                 ref.forward(ure, context());
