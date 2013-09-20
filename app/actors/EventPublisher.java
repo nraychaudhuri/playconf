@@ -1,6 +1,6 @@
 package actors;
 
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import play.Logger;
 import play.libs.Akka;

@@ -1,6 +1,6 @@
 package actors.messages;
 
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public interface UserEvent {
     public JsonNode json();

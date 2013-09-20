@@ -24,6 +24,8 @@ import com.google.inject.Provider;
 
 import external.services.OAuthService;
 import external.services.TwitterOAuthService;
+import play.libs.F;
+import play.mvc.*;
 
 public class Global extends GlobalSettings {
 
@@ -80,13 +82,13 @@ public class Global extends GlobalSettings {
     }
 
     @Override
-    public Result onHandlerNotFound(RequestHeader req) {
-        return Results.notFound(views.html.error.render());
+    public F.Promise<SimpleResult> onHandlerNotFound(RequestHeader req) {
+        return F.Promise.pure((SimpleResult)Results.notFound(views.html.error.render()));
     }
 
     @Override
-    public Result onError(RequestHeader rh, Throwable error) {
-        return Results.internalServerError(views.html.error.render());
+    public F.Promise<SimpleResult> onError(RequestHeader rh, Throwable error) {
+        return F.Promise.pure((SimpleResult)Results.internalServerError(views.html.error.render()));
     }
 
     @Override

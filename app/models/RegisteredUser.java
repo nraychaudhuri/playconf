@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.Required;

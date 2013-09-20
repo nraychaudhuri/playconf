@@ -6,7 +6,7 @@ import static common.Functions.responseToJson;
 
 import javax.inject.Singleton;
 
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import play.libs.F;
 import play.libs.OAuth;

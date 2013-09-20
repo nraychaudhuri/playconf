@@ -1,13 +1,10 @@
-import sbt._
-import Keys._
 import play.Project._
 
-object ApplicationBuild extends Build {
+name := "playconf"
 
-  val appName         = "playconf"
-  val appVersion      = "1.0-SNAPSHOT"
+version := "1.0-SNAPSHOT"
 
-  val appDependencies = Seq(
+libraryDependencies ++= Seq(
     // Add your project dependencies here,
     javaCore,
     javaJdbc,
@@ -19,7 +16,4 @@ object ApplicationBuild extends Build {
     "org.jsoup" % "jsoup" % "1.7.2" % "test"
   )
 
-  val main = play.Project(appName, appVersion, appDependencies).settings(
-    // Add your own project settings here
-  )
-}
+playJavaSettings

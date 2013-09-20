@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 import static play.test.Helpers.redirectLocation;
 import static play.test.Helpers.status;
 
-import org.codehaus.jackson.JsonNode;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -23,6 +22,9 @@ import play.mvc.Http.Flash;
 import play.mvc.Http.Status;
 import play.mvc.Result;
 import akka.actor.ActorRef;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
 import external.services.OAuthService;
 
 public class ApplicationTest {
