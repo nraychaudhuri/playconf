@@ -1,24 +1,22 @@
 package actors;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import play.Logger;
 import play.libs.Akka;
 import play.mvc.WebSocket.Out;
+import scala.Option;
 import actors.messages.CloseConnectionEvent;
 import actors.messages.NewConnectionEvent;
 import actors.messages.UserEvent;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
-import akka.actor.UntypedActorFactory;
-import akka.dispatch.Foreach;
-import scala.Option;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class EventPublisher extends UntypedActor {
 
     public final static ActorRef publisher = Akka.system().actorOf(
-            new Props(EventPublisher.class));
+            Props.create(EventPublisher.class));
 
     @Override
     public void onReceive(Object message) throws Exception {
@@ -46,11 +44,7 @@ public class EventPublisher extends UntypedActor {
     private ActorRef createUserActor(String uuid, final Out<JsonNode> out) {
         @SuppressWarnings("serial")
         ActorRef userActor = getContext().actorOf(
-                new Props(new UntypedActorFactory() {
-                    public UntypedActor create() {
-                        return new UserActor(out);
-                    }
-                }), "user" + uuid);
+                Props.create(UserActor.class, out), "user" + uuid);
 
         return userActor;
     }

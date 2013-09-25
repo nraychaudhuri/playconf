@@ -5,11 +5,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import models.RegisteredUser;
 import models.Proposal;
-
-import com.fasterxml.jackson.databind.JsonNode;
-
+import models.RegisteredUser;
 import play.data.Form;
 import play.libs.F.Callback;
 import play.libs.F.Callback0;
@@ -27,6 +24,9 @@ import actors.messages.NewConnectionEvent;
 import actors.messages.NewSubmissionEvent;
 import actors.messages.UserRegistrationEvent;
 import akka.actor.ActorRef;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
 import external.services.OAuthService;
 
 @Singleton
@@ -84,14 +84,14 @@ public class Application extends Controller {
         };
     }
 
-    public Result index() {
+    public Promise<Result> index() {
         Promise<Result> p = Proposal.findKeynote().map(new Function<Proposal, Result>() {
             @Override
             public Result apply(Proposal s) throws Throwable {
                 return ok(index.render(s));
             }
         });
-        return async(p);
+        return p;
     }
 
     public Result newProposal() {
@@ -110,10 +110,10 @@ public class Application extends Controller {
         return ok();
     }
 
-    public Result submitProposal() {
+    public Promise<Result> submitProposal() {
         Form<Proposal> filledForm = form.bindFromRequest();
         if (filledForm.hasErrors()) {
-            return badRequest(newProposal.render(filledForm));
+            return Promise.<Result>pure(badRequest(newProposal.render(filledForm)));
         } else {
             final Proposal s = filledForm.get();
             Promise<Result> r = s.asyncSave().map(new Function<Void, Result>(){
@@ -123,7 +123,7 @@ public class Application extends Controller {
                     return redirect(routes.Application.index());                    
                 }
             });
-            return async(r);
+            return r;
         }
     }
 }

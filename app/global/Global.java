@@ -7,11 +7,12 @@ import play.Application;
 import play.GlobalSettings;
 import play.Play;
 import play.libs.Akka;
+import play.libs.F;
 import play.libs.F.Callback;
 import play.libs.F.Promise;
 import play.mvc.Http.RequestHeader;
-import play.mvc.Result;
 import play.mvc.Results;
+import play.mvc.SimpleResult;
 import scala.concurrent.duration.Duration;
 import actors.EventPublisher;
 import actors.messages.RandomlySelectTalkEvent;
@@ -24,8 +25,6 @@ import com.google.inject.Provider;
 
 import external.services.OAuthService;
 import external.services.TwitterOAuthService;
-import play.libs.F;
-import play.mvc.*;
 
 public class Global extends GlobalSettings {
 

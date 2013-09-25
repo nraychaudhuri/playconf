@@ -11,6 +11,9 @@
 				@inputText(proposal("title"), args = '_label -> "")
 				<label>Description</label>
 				@textarea(proposal("proposal"), args = 'rows -> 4, 'cols -> 50, '_label -> "")
+				<label>Keywords</label>
+				@inputText(proposal("keywords"), args = '_label -> "")
+				
 			</div>
 			<div class="bloc speaker">
 			<h3>Speaker</h3>
@@ -24,8 +27,6 @@
 				@inputText(proposal("speaker.pictureUrl"), args = '_label -> "")
 				<label>Twitter id</label>
 				@inputText(proposal("speaker.twitterId"), args = '_label -> "")
-				<label>Keywords</label>
-				@inputText(proposal("speaker.keywords"), args = '_label -> "")
 			</div>
 			<p class="submit">
 				<button type="submit" class="button green" id="submitForm">Submit</button>

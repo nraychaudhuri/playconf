@@ -35,6 +35,7 @@ public class Speaker extends Model {
     @Required
     public String pictureUrl;
 
+    @Required
     public String twitterId;
 
     @OneToMany

@@ -1,9 +1,5 @@
 package models;
 
-import static akka.dispatch.Futures.future;
-
-import java.util.concurrent.Callable;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,9 +11,9 @@ import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import play.libs.Akka;
+import play.libs.F;
+import play.libs.F.Function0;
 import play.libs.F.Promise;
-import scala.concurrent.Future;
 
 @Entity
 public class Proposal extends Model {
@@ -52,36 +48,33 @@ public class Proposal extends Model {
             Long.class, Proposal.class);
 
     public static Promise<Proposal> randomlyPickSession() {
-        Future<Proposal> f = akka.dispatch.Futures.future(
-                new Callable<Proposal>() {
-                    public Proposal call() {
-                        // randomly select one if the first
-                        Long randomId = (long) (1 + Math.random() * (5 - 1));
-                        return Proposal.find.byId(randomId);
-                    }
-                }, DbExecutionContext.ctx);
-        return Akka.asPromise(f);
+        return F.Promise.promise(new Function0<Proposal>() {
+            @Override
+            public Proposal apply() throws Throwable {
+                // randomly select one if the first
+                Long randomId = (long) (1 + Math.random() * (5 - 1));
+                return Proposal.find.byId(randomId);
+            }
+        } , DbExecutionContext.ctx);
     }
 
     public static Promise<Proposal> findKeynote() {
-        Future<Proposal> f = future(new Callable<Proposal>() {
-            public Proposal call() {
+        return F.Promise.promise(new Function0<Proposal>() {
+            @Override
+            public Proposal apply() throws Throwable {
                 return find.where().eq("type", SessionType.Keynote)
                         .findUnique();
             }
-        }, DbExecutionContext.ctx);
-
-        return Akka.asPromise(f);
+        } , DbExecutionContext.ctx);
     }
 
     public Promise<Void> asyncSave() {
-        Future<Void> f = future(new Callable<Void>() {
+        return F.Promise.promise(new Function0<Void>() {
             @Override
-            public Void call() throws Exception {
+            public Void apply() throws Throwable {
                 save();
                 return null;
             }
-        }, DbExecutionContext.ctx);
-        return Akka.asPromise(f);
+        } , DbExecutionContext.ctx);
     }
 }

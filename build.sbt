@@ -6,8 +6,6 @@ version := "1.0-SNAPSHOT"
 
 libraryDependencies ++= Seq(
     // Add your project dependencies here,
-    javaCore,
-    javaJdbc,
     javaEbean,
     "mysql" % "mysql-connector-java" % "5.1.26",
     "com.google.inject" % "guice" % "3.0",
