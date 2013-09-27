@@ -9,13 +9,13 @@ import org.junit.Test;
 
 import com.avaje.ebean.Ebean;
 
-public class SubmissionTest {
+public class ProposalTest {
     @Test
-    public void saveNewSubmission() {
+    public void saveNewProposal() {
         running(fakeApplication(testGlobalSettings()), new Runnable() {
             @Override
             public void run() {
-                Proposal s = sampleSubmission();
+                Proposal s = sampleProposal();
                 s.save();
                 assertThat(rowCount()).isEqualTo(1);
             }
@@ -23,11 +23,11 @@ public class SubmissionTest {
     }
 
     @Test
-    public void savingSubmissionAlsoSavesSpeaker() {
+    public void savingProposalAlsoSavesSpeaker() {
         running(fakeApplication(testGlobalSettings()), new Runnable() {
             @Override
             public void run() {
-                Proposal s = sampleSubmission();
+                Proposal s = sampleProposal();
                 s.speaker = sampleSpeaker();
                 s.save();
                 assertThat(rowCount()).isEqualTo(1);

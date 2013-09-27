@@ -72,7 +72,7 @@ public class Global extends GlobalSettings {
                     @Override
                     public void invoke(Proposal s) throws Throwable {
                         EventPublisher.publisher.tell(
-                                new RandomlySelectTalkEvent(s), null);
+                                new RandomlySelectTalkEvent(s), ActorRef.noSender());
                     }
                 });
 
@@ -82,12 +82,12 @@ public class Global extends GlobalSettings {
 
     @Override
     public F.Promise<SimpleResult> onHandlerNotFound(RequestHeader req) {
-        return F.Promise.pure((SimpleResult)Results.notFound(views.html.error.render()));
+        return F.Promise.<SimpleResult>pure(Results.notFound(views.html.error.render()));
     }
 
     @Override
     public F.Promise<SimpleResult> onError(RequestHeader rh, Throwable error) {
-        return F.Promise.pure((SimpleResult)Results.internalServerError(views.html.error.render()));
+        return F.Promise.<SimpleResult>pure(Results.internalServerError(views.html.error.render()));
     }
 
     @Override

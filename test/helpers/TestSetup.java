@@ -60,7 +60,7 @@ public class TestSetup {
 		return dbSettings;
 	}
 
-    public static Proposal sampleSubmission() {
+    public static Proposal sampleProposal() {
         final Proposal s = new Proposal();
         s.title = "Best Java web development experience";
         s.proposal = "I enjoy web development and Play makes that experience even better";

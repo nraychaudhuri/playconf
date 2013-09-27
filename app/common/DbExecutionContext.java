@@ -1,4 +1,4 @@
-package models;
+package common;
 
 import play.libs.Akka;
 import scala.concurrent.ExecutionContext;

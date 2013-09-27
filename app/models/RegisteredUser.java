@@ -15,6 +15,7 @@ import play.libs.F.Promise;
 
 import com.avaje.ebean.PagingList;
 import com.fasterxml.jackson.databind.JsonNode;
+import common.DbExecutionContext;
 
 @Entity
 public class RegisteredUser extends Model {

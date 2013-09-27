@@ -1,9 +1,11 @@
 package actors;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import play.Logger;
 import play.libs.Akka;
 import play.mvc.WebSocket.Out;
-import scala.Option;
 import actors.messages.CloseConnectionEvent;
 import actors.messages.NewConnectionEvent;
 import actors.messages.UserEvent;
@@ -18,21 +20,19 @@ public class EventPublisher extends UntypedActor {
     public final static ActorRef publisher = Akka.system().actorOf(
             Props.create(EventPublisher.class));
 
+    private Map<String, Out<JsonNode>> connections = new HashMap<String, Out<JsonNode>>();
     @Override
     public void onReceive(Object message) throws Exception {
         if (message instanceof NewConnectionEvent) {
             final NewConnectionEvent nce = (NewConnectionEvent) message;
-            createUserActor(nce.uuid(), nce.out());
+            connections.put(nce.uuid(), nce.out());
             Logger.info("New browser connected " + nce.uuid());
         }
         if (message instanceof CloseConnectionEvent) {
             final CloseConnectionEvent cce = (CloseConnectionEvent) message;
             final String uuid = cce.uuid();
-            Option<ActorRef> child = getContext().child("user" + uuid);
-            if(child.isDefined()) {
-                getContext().stop(child.get());
-                Logger.info("Browser " + uuid + "is disconnected");
-            }
+            connections.remove(uuid);
+            Logger.info("Browser " + uuid + "is disconnected");
         }
         if (message instanceof UserEvent) {
             broadcastEvent((UserEvent) message);
@@ -41,20 +41,9 @@ public class EventPublisher extends UntypedActor {
         }
     }
 
-    private ActorRef createUserActor(String uuid, final Out<JsonNode> out) {
-        @SuppressWarnings("serial")
-        ActorRef userActor = getContext().actorOf(
-                Props.create(UserActor.class, out), "user" + uuid);
-
-        return userActor;
-    }
-
     private void broadcastEvent(final UserEvent ure) {
-        getContext().children().foreach(new akka.dispatch.Foreach<ActorRef>() {
-            @Override
-            public void each(ActorRef ref) throws Throwable {
-                ref.forward(ure, context());
-            }
-        });
+        for(Out<JsonNode> out : connections.values()) {
+            out.write(ure.json());
+        }
     }
 }

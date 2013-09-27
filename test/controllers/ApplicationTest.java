@@ -39,7 +39,7 @@ public class ApplicationTest {
         OAuthService oauth = mock(OAuthService.class);
         Tuple<String, RequestToken> t = new F.Tuple<String, RequestToken>(
                 "twitter.redirect.url", new RequestToken("twitter.token", "twitter.secret"));
-        when(oauth.retreiveRequestToken(anyString())).thenReturn(t);
+        when(oauth.retrieveRequestToken(anyString())).thenReturn(t);
 
         Application app = new Application(mock(ActorRef.class), oauth);
         Result result = app.register();

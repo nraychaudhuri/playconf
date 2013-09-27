@@ -38,7 +38,4 @@ public class Speaker extends Model {
     @Required
     public String twitterId;
 
-    @OneToMany
-    List<Proposal> submissions;
-
 }

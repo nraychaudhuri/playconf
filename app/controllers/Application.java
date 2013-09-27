@@ -45,7 +45,7 @@ public class Application extends Controller {
 
     public Result register() {
         String redirectURL = routes.Application.registerCallback().absoluteURL(request());
-        Tuple<String, RequestToken> t = oauth.retreiveRequestToken(redirectURL);
+        Tuple<String, RequestToken> t = oauth.retrieveRequestToken(redirectURL);
         flash("request_token", t._2.token);
         flash("request_secret", t._2.secret);
         return redirect(t._1);
@@ -73,11 +73,11 @@ public class Application extends Controller {
             public void onReady(WebSocket.In<JsonNode> in,
                     WebSocket.Out<JsonNode> out) {
                 final String uuid = java.util.UUID.randomUUID().toString();
-                publisher.tell(new NewConnectionEvent(uuid , out), null);
+                publisher.tell(new NewConnectionEvent(uuid , out), ActorRef.noSender());
                 in.onClose(new Callback0() {
                     @Override
                     public void invoke() throws Throwable {
-                        publisher.tell(new CloseConnectionEvent(uuid), null);
+                        publisher.tell(new CloseConnectionEvent(uuid), ActorRef.noSender());
                     }
                 });
             }

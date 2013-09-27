@@ -38,11 +38,11 @@ public class TwitterOAuthService implements OAuthService {
         this.oauthHelper = new OAuth(new ServiceInfo(
                 "https://api.twitter.com/oauth/request_token",
                 "https://api.twitter.com/oauth/access_token",
-                "https://api.twitter.com/oauth/authorize", key), true);
+                "https://api.twitter.com/oauth/authorize", key));
 
     }
 
-    public Tuple<String, RequestToken> retreiveRequestToken(String callback) {
+    public Tuple<String, RequestToken> retrieveRequestToken(String callback) {
         RequestToken tr = oauthHelper.retrieveRequestToken(callback);
         return new F.Tuple<String, RequestToken>(
                 oauthHelper.redirectUrl(tr.token), tr);
